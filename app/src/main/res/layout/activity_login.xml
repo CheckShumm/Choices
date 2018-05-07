@@ -1,9 +1,86 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".view.login.LoginActivity">
 
-</android.support.constraint.ConstraintLayout>
+<data>
+    <variable
+        name="viewModel"
+        type="com.example.nathanshumm.decided.viewmodel.login.LoginViewModel"/>
+</data>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <include
+            layout="@layout/toolbar">
+        </include>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/colorLightGrey"
+            android:orientation="vertical"
+            android:gravity="center">
+
+        <EditText
+            android:id="@+id/et_login_email"
+            android:hint="email address"
+            android:padding="8dp"
+            android:inputType="textEmailAddress"
+            android:background="@color/colorWhite"
+            android:textColor="@color/colorPrimary"
+            android:layout_width="250dp"
+            android:textSize="20sp"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:shadowColor="@color/colorPrimaryDark"
+            app:addTextChangedListener="@{viewModel.getEmailTextWatcher}"
+            />
+        <EditText
+            android:id="@+id/et_login_password"
+            android:hint="password"
+            android:layout_width="250dp"
+            android:inputType="textPassword"
+            android:textSize="20sp"
+            android:textColor="@color/colorPrimary"
+            android:background="@color/colorWhite"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:padding="8dp"
+            app:addTextChangedListener="@{viewModel.getPasswordTextWatcher}"/>
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:background="@color/colorPrimary"
+            android:textColor="@color/colorWhite"
+            android:text="LOG IN"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:textColor="@color/colorPrimary"
+            android:text="Forgot Password?"
+            android:textAlignment="center"/>
+
+        <Button
+            android:id="@+id/btn_Login"
+            android:layout_width="100dp"
+            android:layout_height="30dp"
+            android:text="Sign Up"
+            android:layout_marginTop="50dp"
+            android:textSize="12sp"
+            android:textColor="@color/colorWhite"
+            android:background="@color/colorPrimary"
+            android:onClick="@{viewModel::onLoginClicked}"/>
+        </LinearLayout>
+
+    </LinearLayout>
+
+</layout>

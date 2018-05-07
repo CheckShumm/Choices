@@ -1,3 +1,7 @@
 <resources>
-    <string name="app_name">Decided</string>
+    <string name="app_name">Choices</string>
+    <string name="app_slogan">Making choices one swipe at a time.</string>
+    <string name="disclaimer">By clicking "Register", I confirm that I have read and agreed to the
+        Terms and Conditions</string>
+
 </resources>

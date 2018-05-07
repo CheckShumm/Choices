@@ -1,35 +1,36 @@
 package com.example.nathanshumm.decided.view.login;
 
+import android.app.ProgressDialog;
 import android.arch.lifecycle.ViewModelProviders;
 import android.databinding.DataBindingUtil;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Window;
+import android.widget.EditText;
+import android.widget.Toast;
 
+import com.example.nathanshumm.decided.Interface.SignUpResultCallbacks;
 import com.example.nathanshumm.decided.R;
-import com.example.nathanshumm.decided.databinding.ActivityLaunchBinding;
-import com.example.nathanshumm.decided.databinding.ActivityLoginBinding;
 import com.example.nathanshumm.decided.databinding.ActivitySignUpBinding;
 import com.example.nathanshumm.decided.viewmodel.launcher.LauncherViewModel;
-import com.example.nathanshumm.decided.viewmodel.launcher.LauncherViewModelFactory;
-import com.example.nathanshumm.decided.viewmodel.login.LoginViewModel;
-import com.example.nathanshumm.decided.viewmodel.login.LoginViewModelFactory;
 import com.example.nathanshumm.decided.viewmodel.signup.SignUpViewModel;
 import com.example.nathanshumm.decided.viewmodel.signup.SignUpViewModelFactory;
 
-public class LoginActivity extends AppCompatActivity {
+public class SignUpActivity extends AppCompatActivity implements SignUpResultCallbacks{
 
     private Toolbar toolbar;
     private Window window;
+    private static ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ActivityLoginBinding activityLoginBinding = DataBindingUtil.setContentView(this, R.layout.activity_login);
-        activityLoginBinding.setViewModel(ViewModelProviders.of(this,
-                new LoginViewModelFactory()).get(LoginViewModel.class));
+        ActivitySignUpBinding activitySignUpBinding = DataBindingUtil.setContentView(this, R.layout.activity_sign_up);
+        activitySignUpBinding.setViewModel(ViewModelProviders.of(this,
+                new SignUpViewModelFactory(this)).get(SignUpViewModel.class));
         setToolbar();
     }
 
@@ -43,11 +44,28 @@ public class LoginActivity extends AppCompatActivity {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
 
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle("Log In");
+        getSupportActionBar().setTitle("Sign Up");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         window = this.getWindow();
         window.setStatusBarColor(ContextCompat.getColor(this, R.color.colorPrimary));
+    }
+
+    @Override
+    public void onSignUp() {
+        Log.e("Flag", "onSignUp()");
+        progressDialog = ProgressDialog.show(SignUpActivity.this, "Please wait...", "Processing...", true);
+    }
+
+    @Override
+    public void onSuccess(String message) {
+        progressDialog.dismiss();
+        Toast.makeText(SignUpActivity.this , message, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onError(String message) {
+        Toast.makeText(SignUpActivity.this , message, Toast.LENGTH_SHORT).show();
     }
 }
