@@ -1,11 +1,16 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 26
+    compileSdkVersion 27
+
+    dataBinding {
+        enabled = true
+    }
+
     defaultConfig {
         applicationId "com.example.nathanshumm.decided"
-        minSdkVersion 14
-        targetSdkVersion 26
+        minSdkVersion 23
+        targetSdkVersion 27
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -20,11 +25,20 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation 'com.android.support:appcompat-v7:26.1.0'
+    implementation 'com.android.support:appcompat-v7:27.1.1'
+    implementation 'com.android.support:design:27.1.1'
+    implementation 'com.android.support:support-v4:27.1.1'
     implementation 'com.android.support.constraint:constraint-layout:1.1.0'
 
     implementation 'com.google.firebase:firebase-core:15.0.2'
     implementation 'com.google.firebase:firebase-auth:15.1.0'
+    implementation 'com.google.firebase:firebase-database:15.0.1'
+
+    implementation 'info.hoang8f:fbutton:1.0.5'
+    implementation 'com.rengwuxian.materialedittext:library:2.1.4'
+
+    implementation 'android.arch.lifecycle:extensions:1.1.1'
+    implementation 'com.github.GrenderG:Toasty:1.2.8'
 
 
     testImplementation 'junit:junit:4.12'
