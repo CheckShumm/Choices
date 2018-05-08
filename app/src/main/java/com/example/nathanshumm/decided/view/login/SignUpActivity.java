@@ -12,17 +12,18 @@ import android.view.Window;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.example.nathanshumm.decided.Interface.SignUpResultCallbacks;
+import com.example.nathanshumm.decided.Interface.AuthResultCallbacks;
 import com.example.nathanshumm.decided.R;
 import com.example.nathanshumm.decided.databinding.ActivitySignUpBinding;
-import com.example.nathanshumm.decided.viewmodel.launcher.LauncherViewModel;
 import com.example.nathanshumm.decided.viewmodel.signup.SignUpViewModel;
 import com.example.nathanshumm.decided.viewmodel.signup.SignUpViewModelFactory;
 
-public class SignUpActivity extends AppCompatActivity implements SignUpResultCallbacks{
+public class SignUpActivity extends AppCompatActivity implements AuthResultCallbacks {
 
     private Toolbar toolbar;
     private Window window;
+    private EditText password;
+    private EditText passwordVerify;
     private static ProgressDialog progressDialog;
 
     @Override
@@ -49,11 +50,11 @@ public class SignUpActivity extends AppCompatActivity implements SignUpResultCal
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         window = this.getWindow();
-        window.setStatusBarColor(ContextCompat.getColor(this, R.color.colorPrimary));
+        window.setStatusBarColor(ContextCompat.getColor(this, R.color.colorPrimaryDark));
     }
 
     @Override
-    public void onSignUp() {
+    public void validate() {
         Log.e("Flag", "onSignUp()");
         progressDialog = ProgressDialog.show(SignUpActivity.this, "Please wait...", "Processing...", true);
     }
@@ -67,5 +68,9 @@ public class SignUpActivity extends AppCompatActivity implements SignUpResultCal
     @Override
     public void onError(String message) {
         Toast.makeText(SignUpActivity.this , message, Toast.LENGTH_SHORT).show();
+        password = (EditText)findViewById(R.id.et_signup_password);
+        passwordVerify = (EditText)findViewById(R.id.et_signup_password_verify);
+        password.setText("");
+        passwordVerify.setText("");
     }
 }

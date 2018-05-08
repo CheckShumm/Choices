@@ -59,7 +59,8 @@
             android:layout_margin="16dp"
             android:background="@color/colorPrimary"
             android:textColor="@color/colorWhite"
-            android:text="LOG IN"/>
+            android:text="LOG IN"
+            android:onClick="@{viewModel.onLoginClicked}"/>
 
         <TextView
             android:layout_width="match_parent"

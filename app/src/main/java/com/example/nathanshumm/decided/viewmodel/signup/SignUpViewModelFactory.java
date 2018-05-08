@@ -4,14 +4,14 @@ import android.arch.lifecycle.ViewModel;
 import android.arch.lifecycle.ViewModelProvider;
 import android.support.annotation.NonNull;
 
-import com.example.nathanshumm.decided.Interface.SignUpResultCallbacks;
+import com.example.nathanshumm.decided.Interface.AuthResultCallbacks;
 
 
 public class SignUpViewModelFactory extends ViewModelProvider.NewInstanceFactory {
 
-    private SignUpResultCallbacks signUpResultCallbacks;
+    private AuthResultCallbacks signUpResultCallbacks;
 
-    public SignUpViewModelFactory(SignUpResultCallbacks signUpResultCallbacks) {
+    public SignUpViewModelFactory(AuthResultCallbacks signUpResultCallbacks) {
         this.signUpResultCallbacks = signUpResultCallbacks;
     }
 

@@ -53,6 +53,7 @@
                 app:addTextChangedListener="@{viewModel.getEmailTextWatcher}"/>
 
             <EditText
+                android:id="@+id/et_signup_password"
                 android:inputType="textPassword"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -63,10 +64,11 @@
                 android:padding="8dp"
                 android:textColor="@color/colorPrimary"
                 android:background="@color/colorWhite"
-                android:text="@{viewModel.password}"
+                android:text="@={viewModel.password}"
                 android:hint=" password"
-                app:addTextChangedListener="@{viewModel.getPasswordVerifyTextWatcher}"/>
+                app:addTextChangedListener="@{viewModel.getPasswordTextWatcher}"/>
             <EditText
+                android:id="@+id/et_signup_password_verify"
                 android:inputType="textPassword"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -77,8 +79,8 @@
                 android:textColor="@color/colorPrimary"
                 android:background="@color/colorWhite"
                 android:hint=" re-type password"
-                android:text="@{viewModel.passwordVerify}"
-                app:addTextChangedListener="@{viewModel.getPasswordTextWatcher}"/>
+                android:text="@={viewModel.passwordVerify}"
+                app:addTextChangedListener="@{viewModel.getPasswordVerifyTextWatcher}"/>
 
             <TextView
                 android:layout_margin="16dp"
