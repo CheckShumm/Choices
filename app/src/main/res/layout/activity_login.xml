@@ -60,7 +60,7 @@
             android:background="@color/colorPrimary"
             android:textColor="@color/colorWhite"
             android:text="LOG IN"
-            android:onClick="@{viewModel.onLoginClicked}"/>
+            android:onClick="@{viewModel::onLoginClicked}"/>
 
         <TextView
             android:layout_width="match_parent"

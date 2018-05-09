@@ -4,4 +4,13 @@
     <string name="disclaimer">By clicking "Register", I confirm that I have read and agreed to the
         Terms and Conditions</string>
 
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_filter">Filter</string>
+    <string name="nav_fav_list">Favorites</string>
+    <string name="nav_home">Home</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
 </resources>
