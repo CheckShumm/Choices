@@ -11,6 +11,7 @@ import com.example.nathanshumm.decided.R;
 import com.example.nathanshumm.decided.view.login.LaunchActivity;
 import com.example.nathanshumm.decided.view.login.LoginActivity;
 import com.example.nathanshumm.decided.view.login.SignUpActivity;
+import com.example.nathanshumm.decided.view.main.MainActivity;
 
 public class LauncherViewModel extends ViewModel {
 
@@ -23,6 +24,11 @@ public class LauncherViewModel extends ViewModel {
     public void onLoginClicked(View view){
         Intent loginIntent = new Intent(view.getContext(), LoginActivity.class);
         view.getContext().startActivity(loginIntent);
+    }
+
+    public void onGuestLoginClicked(View view){
+        Intent mainIntent = new Intent(view.getContext(), MainActivity.class);
+        view.getContext().startActivity(mainIntent);
     }
 
     public void onSignUpClicked(View view){
