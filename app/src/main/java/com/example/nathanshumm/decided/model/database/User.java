@@ -1,7 +1,10 @@
 package com.example.nathanshumm.decided.model.database;
 
 import android.databinding.BaseObservable;
+import android.databinding.Bindable;
 import android.support.annotation.NonNull;
+
+import com.android.databinding.library.baseAdapters.BR;
 
 public class User extends BaseObservable{
 
@@ -16,16 +19,17 @@ public class User extends BaseObservable{
         this.password = password;
     }
 
-    @NonNull
+    @Bindable
     public String getEmail() {
         return email;
     }
 
     public void setEmail(@NonNull String email) {
         this.email = email;
+        notifyPropertyChanged(com.example.nathanshumm.decided.BR.email);
     }
 
-    @NonNull
+    @Bindable
     public String getPassword() {
         return password;
     }
