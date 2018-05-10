@@ -5,10 +5,18 @@
     android:layout_height="match_parent"
     tools:context=".view.home.HomeFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="Home Fragment" />
+        android:orientation="vertical"
+        android:layout_marginLeft="35dp"
+        android:gravity="center"
+        android:layout_marginRight="35dp">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="Google Place API Response"/>
+    </LinearLayout>
 
 </FrameLayout>

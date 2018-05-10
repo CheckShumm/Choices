@@ -35,6 +35,9 @@ dependencies {
     implementation 'com.google.firebase:firebase-auth:15.1.0'
     implementation 'com.google.firebase:firebase-database:15.0.1'
 
+    implementation 'com.google.android.gms:play-services-places:15.0.1'
+    implementation 'com.google.android.gms:play-services-location:15.0.1'
+
     implementation 'info.hoang8f:fbutton:1.0.5'
     implementation 'com.rengwuxian.materialedittext:library:2.1.4'
 
