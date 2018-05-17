@@ -14,7 +14,8 @@ import java.util.ArrayList;
 public class PlacesTask extends AsyncTask<String, Integer, String> {
 
     String data = null;
-    ArrayList<Place> placeList;
+    private ArrayList<Place> placeList;
+    ParserTask parserTask = new ParserTask();
 
     // Invoked by execute() method of this object
     @Override
@@ -24,18 +25,19 @@ public class PlacesTask extends AsyncTask<String, Integer, String> {
         } catch (Exception e) {
             Log.d("Background Task", e.toString());
         }
+
+        // Start parsing the Google places in JSON format
+        // Invokes the "doInBackground()" method of the class ParserTask
         return data;
     }
 
     // Executed after the complete execution of doInBackground() method
     @Override
     protected void onPostExecute(String result) {
-        ParserTask parserTask = new ParserTask();
-
-        // Start parsing the Google places in JSON format
-        // Invokes the "doInBackground()" method of the class ParserTask
         parserTask.execute(result);
-        placeList = parserTask.getPlaceList();
+
+        this.placeList = new ArrayList<>(parserTask.getPlaceList());
+        Log.e("result", result);
     }
 
     private String downloadUrl(String strUrl) throws IOException {
@@ -76,6 +78,6 @@ public class PlacesTask extends AsyncTask<String, Integer, String> {
     }
 
     public ArrayList<Place> getPlaceList(){
-        return placeList;
+        return this.placeList;
     }
 }
