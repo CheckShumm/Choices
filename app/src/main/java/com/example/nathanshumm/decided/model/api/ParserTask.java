@@ -1,19 +1,26 @@
 package com.example.nathanshumm.decided.model.api;
 
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.google.android.gms.location.places.GeoDataClient;
+import com.google.android.gms.location.places.PlacePhotoMetadataResponse;
+import com.google.android.gms.location.places.Places;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.Task;
 
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 
 public class ParserTask extends AsyncTask<String, Integer, List<HashMap<String, String>>> {
 
@@ -60,14 +67,17 @@ public class ParserTask extends AsyncTask<String, Integer, List<HashMap<String, 
             // Getting name
             String name = hmPlace.get("place_name");
 
-            Log.e("Maperr", "place: " + name + "\nphoto " + hmPlace.get("place_name"));
+            Log.e("Maperr", "place: " + name + "\nphotoRef " + hmPlace.get("photo_reference")
+                    + "\nplaceID " + hmPlace.get("id"));
 
             // Getting vicinity
             String vicinity = hmPlace.get("vicinity");
 
             LatLng latLng = new LatLng(lat, lng);
 
-            Place newPlace = new Place(lat, lng, name, vicinity, latLng);
+            String placeId = hmPlace.get("id");
+
+            Place newPlace = new Place(lat, lng, name, vicinity, latLng, placeId);
             placeList.add(newPlace);
 
         }
@@ -76,4 +86,5 @@ public class ParserTask extends AsyncTask<String, Integer, List<HashMap<String, 
     public ArrayList<Place> getPlaceList(){
         return this.placeList;
     }
+
 }
