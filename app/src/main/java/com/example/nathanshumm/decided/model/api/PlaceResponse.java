@@ -8,6 +8,7 @@ import java.util.ArrayList;
 
 public class PlaceResponse {
 
+    private String type;
     private StringBuilder sbValue = new StringBuilder(sbMethod());
     private PlacesTask placesTask = new PlacesTask();
 
@@ -22,7 +23,7 @@ public class PlaceResponse {
         sb.append("&radius=5000");
         sb.append("&types=" + "restaurant");
         sb.append("&sensor=true");
-        sb.append("&key=******* YOUR API KEY****************");
+        sb.append("&key=AIzaSyCTU-xhtgLhx05jPIoUdc_5ncsds1jWP2E");
 
         Log.d("Map", "api: " + sb.toString());
 
