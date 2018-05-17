@@ -18,7 +18,7 @@ import java.util.List;
 public class ParserTask extends AsyncTask<String, Integer, List<HashMap<String, String>>> {
 
     JSONObject jObject;
-    private ArrayList<Place> placeList;
+    public static ArrayList<Place> placeList = new ArrayList<>();
 
     // Invoked by execute() method of this object
     @Override
@@ -60,7 +60,7 @@ public class ParserTask extends AsyncTask<String, Integer, List<HashMap<String, 
             // Getting name
             String name = hmPlace.get("place_name");
 
-            Log.d("Map", "place: " + name);
+            Log.e("Maperr", "place: " + name + "\nphoto " + hmPlace.get("place_name"));
 
             // Getting vicinity
             String vicinity = hmPlace.get("vicinity");
@@ -74,6 +74,6 @@ public class ParserTask extends AsyncTask<String, Integer, List<HashMap<String, 
 
     }
     public ArrayList<Place> getPlaceList(){
-        return placeList;
+        return this.placeList;
     }
 }

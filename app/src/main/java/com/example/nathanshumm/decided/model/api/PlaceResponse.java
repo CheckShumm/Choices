@@ -11,6 +11,11 @@ public class PlaceResponse {
     private String type;
     private StringBuilder sbValue = new StringBuilder(sbMethod());
     private PlacesTask placesTask = new PlacesTask();
+    private ParserTask parserTask = new ParserTask();
+
+    public PlaceResponse() {
+        placesTask.execute(sbValue.toString());
+    }
 
     private StringBuilder sbMethod() {
 
@@ -30,9 +35,9 @@ public class PlaceResponse {
         return sb;
     }
 
-    public ArrayList<com.example.nathanshumm.decided.model.api.Place> getPlace(int index){
-        placesTask.execute(sbValue.toString());
-        return placesTask.getPlaceList();
+    public ArrayList<com.example.nathanshumm.decided.model.api.Place> getPlace(){
+            Log.e("Parse_Size", " "+ parserTask.getPlaceList().size());
+        return parserTask.getPlaceList();
     }
 
 }
