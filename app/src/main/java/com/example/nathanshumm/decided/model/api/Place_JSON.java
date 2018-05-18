@@ -59,6 +59,7 @@ public class Place_JSON {
         String reference = "";
         String photoReference = "";
         String placeId = "";
+        String rating = "";
 
         try {
             // Extracting Place name, if available
@@ -73,10 +74,12 @@ public class Place_JSON {
 
 
             photoReference = ((JSONObject) jPlace.getJSONArray("photos").get(0)).getString("photo_reference");
-            placeId = jPlace.getString("id");
+            placeId = jPlace.getString("place_id");
             latitude = jPlace.getJSONObject("geometry").getJSONObject("location").getString("lat");
             longitude = jPlace.getJSONObject("geometry").getJSONObject("location").getString("lng");
             reference = jPlace.getString("reference");
+            rating = jPlace.getString("rating");
+
 
             place.put("place_name", placeName);
             place.put("vicinity", vicinity);
@@ -85,6 +88,7 @@ public class Place_JSON {
             place.put("reference", reference);
             place.put("photo_reference", photoReference);
             place.put("id", placeId);
+            place.put("rating", rating);
 
         } catch (JSONException e) {
             e.printStackTrace();

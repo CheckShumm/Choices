@@ -10,17 +10,19 @@ public class Place {
     private String vicinity;
     private LatLng latLng;
     private String placeId;
+    private double rating;
 
     public Place() {
     }
 
-    public Place(double lat, double lng, String name, String vicinity, LatLng latLng, String placeId) {
+    public Place(double lat, double lng, String name, String vicinity, LatLng latLng, String placeId, double rating) {
         this.lat = lat;
         this.lng = lng;
         this.name = name;
         this.vicinity = vicinity;
         this.latLng = latLng;
         this.placeId = placeId;
+        this.rating = rating;
     }
 
     public double getLat() {
@@ -69,5 +71,13 @@ public class Place {
 
     public void setPlaceId(String placeId) {
         this.placeId = placeId;
+    }
+
+    public double getRating() {
+        return rating;
+    }
+
+    public void setRating(double rating) {
+        this.rating = rating;
     }
 }

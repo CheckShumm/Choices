@@ -4,6 +4,7 @@ package com.example.nathanshumm.decided.view.home;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,11 +18,14 @@ import com.example.nathanshumm.decided.R;
 import com.example.nathanshumm.decided.model.api.Place;
 import com.example.nathanshumm.decided.model.api.PlaceResponse;
 import com.example.nathanshumm.decided.viewmodel.home.HomeViewModel;
+import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.places.GeoDataClient;
 import com.google.android.gms.location.places.PlacePhotoMetadata;
 import com.google.android.gms.location.places.PlacePhotoMetadataBuffer;
 import com.google.android.gms.location.places.PlacePhotoMetadataResponse;
+import com.google.android.gms.location.places.PlacePhotoMetadataResult;
 import com.google.android.gms.location.places.PlacePhotoResponse;
 import com.google.android.gms.location.places.Places;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -41,6 +45,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
     private PlaceResponse placeResponse;
     private Button testButton;
     private TextView placeText;
+    private TextView placeRating;
     private ImageView placeImage;
     private ArrayList<Place> newPlaceList = new ArrayList<Place>();
 
@@ -62,6 +67,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         testButton = (Button)homeView.findViewById(R.id.testButton);
         placeText = (TextView)homeView.findViewById(R.id.tv_places);
         placeImage = (ImageView)homeView.findViewById(R.id.iv_places);
+        placeRating = (TextView) homeView.findViewById(R.id.tv_rating);
 
         placeResponse = new PlaceResponse();
         testButton.setOnClickListener(this);
@@ -74,10 +80,11 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         newPlaceList =  placeResponse.getPlace();
         Log.e("placesAPI", "" + newPlaceList.size());
         placeText.setText(newPlaceList.get(counter).getName());
-
+        placeRating.setText("Rating: " + newPlaceList.get(counter).getRating() + "/5");
         //get photo
         final Task<PlacePhotoMetadataResponse> photoMetadataResponse = geoDataClient.
                 getPlacePhotos(newPlaceList.get(counter).getPlaceId());
+        Log.e("placeID", "place id: " + newPlaceList.get(counter).getPlaceId());
 
         photoMetadataResponse.addOnCompleteListener(new OnCompleteListener<PlacePhotoMetadataResponse>() {
             @Override
@@ -87,22 +94,24 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
                 // Get the PlacePhotoMetadataBuffer (metadata for all of the photos).
                 PlacePhotoMetadataBuffer photoMetadataBuffer = photos.getPhotoMetadata();
                 // Get the first photo in the list.
-                PlacePhotoMetadata photoMetadata = photoMetadataBuffer.get(0);
-                // Get the attribution text.
-                CharSequence attribution = photoMetadata.getAttributions();
-                // Get a full-size bitmap for the photo.
-                Task<PlacePhotoResponse> photoResponse = geoDataClient.getPhoto(photoMetadata);
-                photoResponse.addOnCompleteListener(new OnCompleteListener<PlacePhotoResponse>() {
-                    @Override
-                    public void onComplete(@NonNull Task<PlacePhotoResponse> task) {
-                        PlacePhotoResponse photo = task.getResult();
-                        Bitmap bitmap = photo.getBitmap();
-                        placeImage.setImageBitmap(bitmap);
-                    }
-                });
+                if(photoMetadataBuffer.getCount() > 0) {
+                    PlacePhotoMetadata photoMetadata = photoMetadataBuffer.get(0);
+
+                    // Get the attribution text.
+                    CharSequence attribution = photoMetadata.getAttributions();
+                    //                    // Get a full-size bitmap for the photo.
+                    Task<PlacePhotoResponse> photoResponse = geoDataClient.getPhoto(photoMetadata);
+                    photoResponse.addOnCompleteListener(new OnCompleteListener<PlacePhotoResponse>() {
+                        @Override
+                        public void onComplete(@NonNull Task<PlacePhotoResponse> task) {
+                            PlacePhotoResponse photo = task.getResult();
+                            Bitmap bitmap = photo.getBitmap();
+                            placeImage.setImageBitmap(bitmap);
+                        }
+                    });
+                }
             }
         });
-
 
         counter++;
     }
@@ -111,4 +120,5 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
     public void onClick(View v) {
         retrievePlace();
     }
+
 }
