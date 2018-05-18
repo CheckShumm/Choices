@@ -63,12 +63,15 @@ public class MainActivity extends AppCompatActivity {
 
                     case R.id.nav_filter:
                         setFragment(mainViewModel.getFilterFragment());
+                        getSupportActionBar().setTitle("Filter");
                         return true;
                     case R.id.nav_favorites:
                         setFragment(mainViewModel.getFavoritesFragment());
+                        getSupportActionBar().setTitle("Favorites");
                         return true;
                     case R.id.nav_home:
                         setFragment(mainViewModel.getHomeFragment());
+                        getSupportActionBar().setTitle("Choices");
                         return true;
 
                     default: return false;

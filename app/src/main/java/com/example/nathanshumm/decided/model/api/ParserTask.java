@@ -67,8 +67,8 @@ public class ParserTask extends AsyncTask<String, Integer, List<HashMap<String, 
             // Getting name
             String name = hmPlace.get("place_name");
 
-            Log.e("Maperr", "place: " + name + "\nphotoRef " + hmPlace.get("photo_reference")
-                    + "\nplaceID " + hmPlace.get("id"));
+            //Log.e("Maperr", "place: " + name + "\nphotoRef " + hmPlace.get("photo_reference")
+             //       + "\nplaceID " + hmPlace.get("id"));
 
             // Getting vicinity
             String vicinity = hmPlace.get("vicinity");

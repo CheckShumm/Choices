@@ -17,6 +17,7 @@ import android.widget.TextView;
 import com.example.nathanshumm.decided.R;
 import com.example.nathanshumm.decided.model.api.Place;
 import com.example.nathanshumm.decided.model.api.PlaceResponse;
+import com.example.nathanshumm.decided.viewmodel.home.CardAdapter;
 import com.example.nathanshumm.decided.viewmodel.home.HomeViewModel;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -30,6 +31,8 @@ import com.google.android.gms.location.places.PlacePhotoResponse;
 import com.google.android.gms.location.places.Places;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.wenchao.cardstack.CardStack;
+import com.willy.ratingbar.ScaleRatingBar;
 
 import org.w3c.dom.Text;
 
@@ -39,7 +42,7 @@ import java.util.ArrayList;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class HomeFragment extends Fragment implements View.OnClickListener{
+public class HomeFragment extends Fragment implements View.OnClickListener, CardStack.CardEventListener {
 
     private HomeViewModel homeViewModel;
     private PlaceResponse placeResponse;
@@ -47,7 +50,13 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
     private TextView placeText;
     private TextView placeRating;
     private ImageView placeImage;
-    private ArrayList<Place> newPlaceList = new ArrayList<Place>();
+
+    private ScaleRatingBar scaleRatingBar; // Rating Bar
+    private ArrayList<Place> newPlaceList = new ArrayList<Place>(); // Arraylist of places from places api
+
+    // Card stack
+    private CardStack cardStack;
+    private CardAdapter cardAdapter;
 
     // clients
     private GeoDataClient geoDataClient;
@@ -67,9 +76,18 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         testButton = (Button)homeView.findViewById(R.id.testButton);
         placeText = (TextView)homeView.findViewById(R.id.tv_places);
         placeImage = (ImageView)homeView.findViewById(R.id.iv_places);
-        placeRating = (TextView) homeView.findViewById(R.id.tv_rating);
-
         placeResponse = new PlaceResponse();
+        initPlaces();
+
+        cardStack = (CardStack)homeView.findViewById(R.id.card_stack);
+        cardStack.setContentResource(R.layout.card_layout);
+        cardStack.setStackMargin(20);
+        cardStack.setAdapter(cardAdapter);
+
+        cardStack.setListener(this);
+
+        //placeRating = (TextView) homeView.findViewById(R.id.tv_rating);
+        scaleRatingBar = homeView.findViewById(R.id.simpleRatingBar);
         testButton.setOnClickListener(this);
         geoDataClient = Places.getGeoDataClient(this.getActivity(),null);
 
@@ -78,13 +96,12 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
 
     private void retrievePlace(){
         newPlaceList =  placeResponse.getPlace();
-        Log.e("placesAPI", "" + newPlaceList.size());
         placeText.setText(newPlaceList.get(counter).getName());
-        placeRating.setText("Rating: " + newPlaceList.get(counter).getRating() + "/5");
+        //placeRating.setText("Rating: " + newPlaceList.get(counter).getRating() + "/5");
+        scaleRatingBar.setRating((float)newPlaceList.get(counter).getRating());
         //get photo
         final Task<PlacePhotoMetadataResponse> photoMetadataResponse = geoDataClient.
                 getPlacePhotos(newPlaceList.get(counter).getPlaceId());
-        Log.e("placeID", "place id: " + newPlaceList.get(counter).getPlaceId());
 
         photoMetadataResponse.addOnCompleteListener(new OnCompleteListener<PlacePhotoMetadataResponse>() {
             @Override
@@ -118,7 +135,44 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
 
     @Override
     public void onClick(View v) {
-        retrievePlace();
+        //retrievePlace();
+        initPlaces();
     }
 
+    public void initPlaces(){
+        Log.e("loadAdapter", "init");
+        newPlaceList =  placeResponse.getPlace();
+        Log.e("placesAPI", "" + newPlaceList.size());
+        cardAdapter = new CardAdapter(getActivity().getApplicationContext(),0);
+        for(int i=0; i<newPlaceList.size(); i++){
+            Log.e("loadAdapter", " load Adapter id " + newPlaceList.get(i).getPlaceId());
+            cardAdapter.add(newPlaceList.get(i));
+        }
+
+    }
+
+    @Override
+    public boolean swipeEnd(int i, float v) {
+        return v>300;
+    }
+
+    @Override
+    public boolean swipeStart(int i, float v) {
+        return false;
+    }
+
+    @Override
+    public boolean swipeContinue(int i, float v, float v1) {
+        return false;
+    }
+
+    @Override
+    public void discarded(int i, int i1) {
+
+    }
+
+    @Override
+    public void topCardTapped() {
+
+    }
 }
