@@ -77,7 +77,9 @@ public class ParserTask extends AsyncTask<String, Integer, List<HashMap<String, 
 
             String placeId = hmPlace.get("id");
 
-            Place newPlace = new Place(lat, lng, name, vicinity, latLng, placeId);
+            double rating = Double.parseDouble(hmPlace.get("rating"));
+
+            Place newPlace = new Place(lat, lng, name, vicinity, latLng, placeId, rating);
             placeList.add(newPlace);
 
         }
