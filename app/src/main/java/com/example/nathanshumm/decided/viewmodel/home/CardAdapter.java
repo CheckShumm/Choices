@@ -69,7 +69,8 @@ public class CardAdapter extends ArrayAdapter<Place>{
 
                     // Get the attribution text.
                     CharSequence attribution = photoMetadata.getAttributions();
-                    //                    // Get a full-size bitmap for the photo.
+                    // Get a full-size bitmap for the photo.
+
                     Task<PlacePhotoResponse> photoResponse = geoDataClient.getPhoto(photoMetadata);
                     photoResponse.addOnCompleteListener(new OnCompleteListener<PlacePhotoResponse>() {
                         @Override

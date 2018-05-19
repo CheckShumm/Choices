@@ -42,7 +42,7 @@ import java.util.ArrayList;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class HomeFragment extends Fragment implements View.OnClickListener, CardStack.CardEventListener {
+public class HomeFragment extends Fragment implements CardStack.CardEventListener {
 
     private HomeViewModel homeViewModel;
     private PlaceResponse placeResponse;
@@ -73,7 +73,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Card
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View homeView = inflater.inflate(R.layout.fragment_home, container, false);
-        testButton = (Button)homeView.findViewById(R.id.testButton);
         placeText = (TextView)homeView.findViewById(R.id.tv_places);
         placeImage = (ImageView)homeView.findViewById(R.id.iv_places);
         placeResponse = new PlaceResponse();
@@ -88,7 +87,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Card
 
         //placeRating = (TextView) homeView.findViewById(R.id.tv_rating);
         scaleRatingBar = homeView.findViewById(R.id.simpleRatingBar);
-        testButton.setOnClickListener(this);
+
         geoDataClient = Places.getGeoDataClient(this.getActivity(),null);
 
         return homeView;
@@ -133,11 +132,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Card
         counter++;
     }
 
-    @Override
-    public void onClick(View v) {
-        //retrievePlace();
-        initPlaces();
-    }
 
     public void initPlaces(){
         Log.e("loadAdapter", "init");
