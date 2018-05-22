@@ -7,6 +7,7 @@ import android.support.v4.app.FragmentTransaction;
 import com.example.nathanshumm.decided.view.favorites.FavoritesFragment;
 import com.example.nathanshumm.decided.view.filter.FilterFragment;
 import com.example.nathanshumm.decided.view.home.HomeFragment;
+import com.example.nathanshumm.decided.view.main.MainActivity;
 
 public class MainViewModel extends ViewModel {
 

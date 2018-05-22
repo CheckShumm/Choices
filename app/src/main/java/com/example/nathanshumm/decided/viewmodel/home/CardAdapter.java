@@ -52,39 +52,9 @@ public class CardAdapter extends ArrayAdapter<Place>{
         // Set Rating
         scaleRatingBar.setRating((float)getItem(position).getRating());
 
-        // Get Photo
-        final Task<PlacePhotoMetadataResponse> photoMetadataResponse = geoDataClient.
-                getPlacePhotos(getItem(position).getPlaceId());
-        final String placeID = getItem(position).getPlaceId();
-        photoMetadataResponse.addOnCompleteListener(new OnCompleteListener<PlacePhotoMetadataResponse>() {
-            @Override
-            public void onComplete(@NonNull Task<PlacePhotoMetadataResponse> task) {
-                // Get the list of photos.
-                PlacePhotoMetadataResponse photos = task.getResult();
-                // Get the PlacePhotoMetadataBuffer (metadata for all of the photos).
-                PlacePhotoMetadataBuffer photoMetadataBuffer = photos.getPhotoMetadata();
-                // Get the first photo in the list.
-                if(photoMetadataBuffer.getCount() > 0) {
-                    PlacePhotoMetadata photoMetadata = photoMetadataBuffer.get(0);
-
-                    // Get the attribution text.
-                    CharSequence attribution = photoMetadata.getAttributions();
-                    // Get a full-size bitmap for the photo.
-
-                    Task<PlacePhotoResponse> photoResponse = geoDataClient.getPhoto(photoMetadata);
-                    photoResponse.addOnCompleteListener(new OnCompleteListener<PlacePhotoResponse>() {
-                        @Override
-                        public void onComplete(@NonNull Task<PlacePhotoResponse> task) {
-                            PlacePhotoResponse photo = task.getResult();
-                            Bitmap bitmap = photo.getBitmap();
-                            // set ImageView
-                            Log.e("loadImage", "image id: "+ placeID);
-                            placeImage.setImageBitmap(bitmap);
-                        }
-                    });
-                }
-            }
-        });
+        // Set Photo
+        placeImage.setImageBitmap(getItem(position).getPhoto());
+        Log.e("photoRef", "display photo: " + getItem(position).getName());
 
 
         return convertView;

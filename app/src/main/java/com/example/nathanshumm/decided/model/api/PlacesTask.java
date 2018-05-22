@@ -20,12 +20,12 @@ public class PlacesTask extends AsyncTask<String, Integer, String> {
     // Invoked by execute() method of this object
     @Override
     protected String doInBackground(String... url) {
+        Log.e("NPT", "placesTask in background");
         try {
             data = downloadUrl(url[0]);
         } catch (Exception e) {
             Log.d("Background Task", e.toString());
         }
-
         // Start parsing the Google places in JSON format
         // Invokes the "doInBackground()" method of the class ParserTask
         return data;
@@ -35,8 +35,8 @@ public class PlacesTask extends AsyncTask<String, Integer, String> {
     @Override
     protected void onPostExecute(String result) {
         parserTask.execute(result);
-
         this.placeList = new ArrayList<>(parserTask.getPlaceList());
+        Log.e("NPT", "placesTask on post executes");
         Log.e("result", result);
     }
 

@@ -1,5 +1,7 @@
 package com.example.nathanshumm.decided.model.api;
 
+import android.graphics.Bitmap;
+
 import com.google.android.gms.maps.model.LatLng;
 
 public class Place {
@@ -11,9 +13,11 @@ public class Place {
     private LatLng latLng;
     private String placeId;
     private double rating;
+    private Bitmap photo;
 
     public Place() {
     }
+
 
     public Place(double lat, double lng, String name, String vicinity, LatLng latLng, String placeId, double rating) {
         this.lat = lat;
@@ -79,5 +83,13 @@ public class Place {
 
     public void setRating(double rating) {
         this.rating = rating;
+    }
+
+    public Bitmap getPhoto() {
+        return photo;
+    }
+
+    public void setPhoto(Bitmap photo) {
+        this.photo = photo;
     }
 }

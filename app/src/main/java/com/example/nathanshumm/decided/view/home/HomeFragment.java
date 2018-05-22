@@ -2,6 +2,7 @@ package com.example.nathanshumm.decided.view.home;
 
 
 import android.graphics.Bitmap;
+import android.media.Image;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -12,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import com.example.nathanshumm.decided.R;
@@ -42,14 +44,16 @@ import java.util.ArrayList;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class HomeFragment extends Fragment implements CardStack.CardEventListener {
+public class HomeFragment extends Fragment implements CardStack.CardEventListener, View.OnClickListener {
 
     private HomeViewModel homeViewModel;
     private PlaceResponse placeResponse;
-    private Button testButton;
-    private TextView placeText;
-    private TextView placeRating;
-    private ImageView placeImage;
+
+    // buttons
+    private ImageView likeButton;
+    private ImageView dislikeButton;
+    private ImageView infoButton;
+    private int stackIndex = 0;
 
     private ScaleRatingBar scaleRatingBar; // Rating Bar
     private ArrayList<Place> newPlaceList = new ArrayList<Place>(); // Arraylist of places from places api
@@ -73,35 +77,54 @@ public class HomeFragment extends Fragment implements CardStack.CardEventListene
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View homeView = inflater.inflate(R.layout.fragment_home, container, false);
-        placeText = (TextView)homeView.findViewById(R.id.tv_places);
-        placeImage = (ImageView)homeView.findViewById(R.id.iv_places);
-        placeResponse = new PlaceResponse();
-        initPlaces();
+
+        likeButton = (ImageView)homeView.findViewById(R.id.btn_like);
+        dislikeButton = (ImageView)homeView.findViewById(R.id.btn_dislike);
+        infoButton = (ImageView)homeView.findViewById(R.id.btn_info);
 
         cardStack = (CardStack)homeView.findViewById(R.id.card_stack);
+
         cardStack.setContentResource(R.layout.card_layout);
         cardStack.setStackMargin(20);
-        cardStack.setAdapter(cardAdapter);
 
         cardStack.setListener(this);
+        likeButton.setOnClickListener(this);
+        dislikeButton.setOnClickListener(this);
+        infoButton.setOnClickListener(this);
 
-        //placeRating = (TextView) homeView.findViewById(R.id.tv_rating);
-        scaleRatingBar = homeView.findViewById(R.id.simpleRatingBar);
 
         geoDataClient = Places.getGeoDataClient(this.getActivity(),null);
-
+        cardAdapter = new CardAdapter(getActivity().getApplicationContext(),0);
+        initPlaces();
+        cardStack.setAdapter(cardAdapter);
+        setRetainInstance(true);
         return homeView;
     }
 
-    private void retrievePlace(){
-        newPlaceList =  placeResponse.getPlace();
-        placeText.setText(newPlaceList.get(counter).getName());
-        //placeRating.setText("Rating: " + newPlaceList.get(counter).getRating() + "/5");
-        scaleRatingBar.setRating((float)newPlaceList.get(counter).getRating());
-        //get photo
-        final Task<PlacePhotoMetadataResponse> photoMetadataResponse = geoDataClient.
-                getPlacePhotos(newPlaceList.get(counter).getPlaceId());
 
+    public void initPlaces(){
+        for(int i=1; i<newPlaceList.size(); i++){
+            setPhoto(newPlaceList.get(i));
+            Log.e("npt", "name: " + newPlaceList.get(i).getName());
+        }
+    }
+
+    public void fillCardStack(){
+        for(int i=1; i<newPlaceList.size(); i++){
+            cardAdapter.add(newPlaceList.get(i));
+        }
+    }
+
+    public void getResponse(){
+        placeResponse = new PlaceResponse();
+        newPlaceList =  placeResponse.getPlace();
+    }
+
+    public void setPhoto(final Place place){
+        // Get Photo
+        final Task<PlacePhotoMetadataResponse> photoMetadataResponse = geoDataClient.
+                getPlacePhotos(place.getPlaceId());
+        Log.e("photoRef", "set photo 1 : " + place.getName());
         photoMetadataResponse.addOnCompleteListener(new OnCompleteListener<PlacePhotoMetadataResponse>() {
             @Override
             public void onComplete(@NonNull Task<PlacePhotoMetadataResponse> task) {
@@ -115,34 +138,21 @@ public class HomeFragment extends Fragment implements CardStack.CardEventListene
 
                     // Get the attribution text.
                     CharSequence attribution = photoMetadata.getAttributions();
-                    //                    // Get a full-size bitmap for the photo.
-                    Task<PlacePhotoResponse> photoResponse = geoDataClient.getPhoto(photoMetadata);
+                    // Get a full-size bitmap for the photo.
+
+                    Task<PlacePhotoResponse> photoResponse = geoDataClient.getScaledPhoto(photoMetadata,300,300);
                     photoResponse.addOnCompleteListener(new OnCompleteListener<PlacePhotoResponse>() {
                         @Override
                         public void onComplete(@NonNull Task<PlacePhotoResponse> task) {
                             PlacePhotoResponse photo = task.getResult();
                             Bitmap bitmap = photo.getBitmap();
-                            placeImage.setImageBitmap(bitmap);
+                            Log.e("photoRef", "set photo 2 : " + place.getName());
+                            place.setPhoto(bitmap);
                         }
                     });
                 }
             }
         });
-
-        counter++;
-    }
-
-
-    public void initPlaces(){
-        Log.e("loadAdapter", "init");
-        newPlaceList =  placeResponse.getPlace();
-        Log.e("placesAPI", "" + newPlaceList.size());
-        cardAdapter = new CardAdapter(getActivity().getApplicationContext(),0);
-        for(int i=0; i<newPlaceList.size(); i++){
-            Log.e("loadAdapter", " load Adapter id " + newPlaceList.get(i).getPlaceId());
-            cardAdapter.add(newPlaceList.get(i));
-        }
-
     }
 
     @Override
@@ -162,11 +172,37 @@ public class HomeFragment extends Fragment implements CardStack.CardEventListene
 
     @Override
     public void discarded(int i, int i1) {
+        stackIndex++;
+        Log.e("cardcounter", "count: " + cardAdapter.getCount());
+        if(stackIndex == 5 ){
+            placeResponse.executeNextResponse();
+        }
+        if (stackIndex == 13){
+            newPlaceList =  placeResponse.getPlace();
+            initPlaces();
+        }
+        if(stackIndex == 15){
+            fillCardStack();
+            stackIndex = -5;
+        }
+    }
+    @Override
+    public void topCardTapped() {
 
     }
 
     @Override
-    public void topCardTapped() {
-
+    public void onClick(View v) {
+        switch(v.getId()){
+            case R.id.btn_like:
+                cardStack.discardTop(1);
+                break;
+            case R.id.btn_dislike:
+                cardStack.discardTop(0);
+                break;
+            case R.id.btn_info:
+                fillCardStack();
+                break;
+        }
     }
 }
