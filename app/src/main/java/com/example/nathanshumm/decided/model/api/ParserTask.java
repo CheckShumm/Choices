@@ -25,12 +25,14 @@ import java.util.Locale;
 public class ParserTask extends AsyncTask<String, Integer, List<HashMap<String, String>>> {
 
     JSONObject jObject;
+    private boolean loaded;
+    public static String nextPageToken;
     public static ArrayList<Place> placeList = new ArrayList<>();
 
     // Invoked by execute() method of this object
     @Override
     protected List<HashMap<String, String>> doInBackground(String... jsonData) {
-
+        Log.e("NPT", "parserTask in background");
         List<HashMap<String, String>> places = null;
         Place_JSON placeJson = new Place_JSON();
 
@@ -38,6 +40,8 @@ public class ParserTask extends AsyncTask<String, Integer, List<HashMap<String, 
             jObject = new JSONObject(jsonData[0]);
 
             places = placeJson.parse(jObject);
+            this.nextPageToken = placeJson.nextPageToken;
+            Log.e("nextPageToken", this.nextPageToken);
 
         } catch (Exception e) {
             Log.d("Exception", e.toString());
@@ -48,10 +52,13 @@ public class ParserTask extends AsyncTask<String, Integer, List<HashMap<String, 
     // Executed after the complete execution of doInBackground() method
     @Override
     protected void onPostExecute(List<HashMap<String, String>> list) {
-
+        Log.e("NPT", "parserTask on post executes");
+        loaded = false;
         Log.d("Map", "list size: " + list.size());
 
         // Clears all the existing markers;
+        if(placeList.size() > 19)
+            placeList.clear();
 
         for (int i = 0; i < list.size(); i++) {
 
@@ -67,8 +74,7 @@ public class ParserTask extends AsyncTask<String, Integer, List<HashMap<String, 
             // Getting name
             String name = hmPlace.get("place_name");
 
-            Log.e("Maperr", "place: " + name + "\nphotoRef " + hmPlace.get("photo_reference")
-                    + "\nplaceID " + hmPlace.get("id"));
+            Log.e("NPT", "place: " + name);
 
             // Getting vicinity
             String vicinity = hmPlace.get("vicinity");
@@ -80,13 +86,18 @@ public class ParserTask extends AsyncTask<String, Integer, List<HashMap<String, 
             double rating = Double.parseDouble(hmPlace.get("rating"));
 
             Place newPlace = new Place(lat, lng, name, vicinity, latLng, placeId, rating);
-            placeList.add(newPlace);
 
+            placeList.add(newPlace);
+            loaded = true;
         }
 
     }
-    public ArrayList<Place> getPlaceList(){
-        return this.placeList;
+
+    public static String getNextPageToken(){
+        return nextPageToken;
+    }
+    public static ArrayList<Place> getPlaceList(){
+        return placeList;
     }
 
 }

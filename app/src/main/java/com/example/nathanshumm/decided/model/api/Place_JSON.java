@@ -13,12 +13,14 @@ public class Place_JSON {
     /**
      * Receives a JSONObject and returns a list
      */
+    public String nextPageToken = "";
     public List<HashMap<String, String>> parse(JSONObject jObject) {
 
         JSONArray jPlaces = null;
         try {
             /** Retrieves all the elements in the 'places' array */
             jPlaces = jObject.getJSONArray("results");
+            nextPageToken = jObject.getString("next_page_token");
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -73,7 +75,6 @@ public class Place_JSON {
             }
 
 
-            photoReference = ((JSONObject) jPlace.getJSONArray("photos").get(0)).getString("photo_reference");
             placeId = jPlace.getString("place_id");
             latitude = jPlace.getJSONObject("geometry").getJSONObject("location").getString("lat");
             longitude = jPlace.getJSONObject("geometry").getJSONObject("location").getString("lng");
@@ -86,7 +87,6 @@ public class Place_JSON {
             place.put("lat", latitude);
             place.put("lng", longitude);
             place.put("reference", reference);
-            place.put("photo_reference", photoReference);
             place.put("id", placeId);
             place.put("rating", rating);
 
