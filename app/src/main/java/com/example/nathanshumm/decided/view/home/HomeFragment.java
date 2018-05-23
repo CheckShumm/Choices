@@ -2,6 +2,7 @@ package com.example.nathanshumm.decided.view.home;
 
 
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.media.Image;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -64,7 +65,6 @@ public class HomeFragment extends Fragment implements CardStack.CardEventListene
 
     // clients
     private GeoDataClient geoDataClient;
-    private GoogleApiClient googleApiClient;
     int counter = 0;
 
     public HomeFragment() {
@@ -92,10 +92,11 @@ public class HomeFragment extends Fragment implements CardStack.CardEventListene
         dislikeButton.setOnClickListener(this);
         infoButton.setOnClickListener(this);
 
+        initPlaces();
+
 
         geoDataClient = Places.getGeoDataClient(this.getActivity(),null);
         cardAdapter = new CardAdapter(getActivity().getApplicationContext(),0);
-        initPlaces();
         cardStack.setAdapter(cardAdapter);
         setRetainInstance(true);
         return homeView;
@@ -103,8 +104,11 @@ public class HomeFragment extends Fragment implements CardStack.CardEventListene
 
 
     public void initPlaces(){
+        Log.e("npt", "initializing places, size: " + newPlaceList.size());
         for(int i=1; i<newPlaceList.size(); i++){
-            setPhoto(newPlaceList.get(i));
+            if(newPlaceList.get(i).getPhoto() == null) {
+                setPhoto(newPlaceList.get(i));
+            }
             Log.e("npt", "name: " + newPlaceList.get(i).getName());
         }
     }
@@ -117,6 +121,7 @@ public class HomeFragment extends Fragment implements CardStack.CardEventListene
 
     public void getResponse(){
         placeResponse = new PlaceResponse();
+        placeResponse.execute();
         newPlaceList =  placeResponse.getPlace();
     }
 
@@ -131,23 +136,26 @@ public class HomeFragment extends Fragment implements CardStack.CardEventListene
                 // Get the list of photos.
                 PlacePhotoMetadataResponse photos = task.getResult();
                 // Get the PlacePhotoMetadataBuffer (metadata for all of the photos).
-                PlacePhotoMetadataBuffer photoMetadataBuffer = photos.getPhotoMetadata();
+                final PlacePhotoMetadataBuffer photoMetadataBuffer = photos.getPhotoMetadata();
                 // Get the first photo in the list.
                 if(photoMetadataBuffer.getCount() > 0) {
-                    PlacePhotoMetadata photoMetadata = photoMetadataBuffer.get(0);
+                    final PlacePhotoMetadata photoMetadata = photoMetadataBuffer.get(0);
 
                     // Get the attribution text.
                     CharSequence attribution = photoMetadata.getAttributions();
                     // Get a full-size bitmap for the photo.
 
-                    Task<PlacePhotoResponse> photoResponse = geoDataClient.getScaledPhoto(photoMetadata,300,300);
+                    final Task<PlacePhotoResponse> photoResponse = geoDataClient.getScaledPhoto(photoMetadata,512,512);
                     photoResponse.addOnCompleteListener(new OnCompleteListener<PlacePhotoResponse>() {
                         @Override
                         public void onComplete(@NonNull Task<PlacePhotoResponse> task) {
                             PlacePhotoResponse photo = task.getResult();
+                            BitmapFactory.Options options = new BitmapFactory.Options();
+                            options.inSampleSize = 8;
                             Bitmap bitmap = photo.getBitmap();
                             Log.e("photoRef", "set photo 2 : " + place.getName());
                             place.setPhoto(bitmap);
+                            photoMetadataBuffer.release();
                         }
                     });
                 }

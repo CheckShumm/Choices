@@ -34,11 +34,11 @@
                 app:itemBackground="@color/colorWhite">
             </android.support.design.widget.BottomNavigationView>
 
-            <android.support.v4.view.ViewPager
+            <com.example.nathanshumm.decided.viewmodel.main.CustomViewPager
                 android:id="@+id/viewPager"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
-            </android.support.v4.view.ViewPager>
+            </com.example.nathanshumm.decided.viewmodel.main.CustomViewPager>
             <!--<FrameLayout-->
                 <!--android:id="@+id/m_Frame"-->
                 <!--android:layout_width="match_parent"-->
