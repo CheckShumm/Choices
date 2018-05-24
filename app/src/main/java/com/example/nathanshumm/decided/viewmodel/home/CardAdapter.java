@@ -32,7 +32,6 @@ public class CardAdapter extends ArrayAdapter<Place>{
     private TextView placeText;
     private ImageView placeImage;
     private ScaleRatingBar scaleRatingBar;
-    private GeoDataClient geoDataClient;
 
     public CardAdapter(@NonNull Context context, int resource) {
         super(context, resource);
@@ -44,7 +43,6 @@ public class CardAdapter extends ArrayAdapter<Place>{
         placeText = (TextView)convertView.findViewById(R.id.tv_places);
         placeImage = (ImageView)convertView.findViewById(R.id.iv_places);
         scaleRatingBar = convertView.findViewById(R.id.simpleRatingBar);
-        geoDataClient = Places.getGeoDataClient(this.getContext(),null);
 
         // Set Text
         placeText.setText(getItem(position).getName());

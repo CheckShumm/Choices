@@ -23,6 +23,7 @@ import com.example.nathanshumm.decided.databinding.ActivityMainBinding;
 import com.example.nathanshumm.decided.view.home.HomeFragment;
 import com.example.nathanshumm.decided.viewmodel.login.LoginViewModel;
 import com.example.nathanshumm.decided.viewmodel.login.LoginViewModelFactory;
+import com.example.nathanshumm.decided.viewmodel.main.CustomViewPager;
 import com.example.nathanshumm.decided.viewmodel.main.MainViewModel;
 import com.example.nathanshumm.decided.viewmodel.main.ViewPagerAdapter;
 
@@ -32,19 +33,18 @@ public class MainActivity extends AppCompatActivity {
     private Window window;
     private BottomNavigationView bottomNavigationView;
     private MainViewModel mainViewModel;
-    private ViewPager viewPager;
+    private CustomViewPager viewPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ActivityMainBinding activityMainBinding = DataBindingUtil.setContentView(this,R.layout.activity_main);
         mainViewModel = new MainViewModel();
-        viewPager = (ViewPager)findViewById(R.id.viewPager);
+        viewPager = (CustomViewPager)findViewById(R.id.viewPager);
         setViewPager(viewPager);
         setToolbar();
         setNavigationDrawer();
         navigationListener();
-        mainViewModel.getHomeFragment().getResponse();
     }
 
     @Override
@@ -78,6 +78,7 @@ public class MainActivity extends AppCompatActivity {
                         getSupportActionBar().setTitle("Favorites");
                         return true;
                     case R.id.nav_home:
+                        mainViewModel.getHomeFragment().getResponse();
                         viewPager.setCurrentItem(1);
                         getSupportActionBar().setTitle("Choices");
                         return true;

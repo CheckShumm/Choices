@@ -8,14 +8,13 @@ import java.util.ArrayList;
 
 public class PlaceResponse {
 
-    private String type;
+    private static String type = "restaurant";
     private String nextPageToken;
     private StringBuilder sbValue = new StringBuilder(sbMethod(false));
     private PlacesTask placesTask = new PlacesTask();
     private ParserTask parserTask = new ParserTask();
 
     public PlaceResponse() {
-        placesTask.execute(sbValue.toString());
     }
 
     private StringBuilder sbMethod(boolean nextPage) {
@@ -27,17 +26,21 @@ public class PlaceResponse {
         StringBuilder sb = new StringBuilder("https://maps.googleapis.com/maps/api/place/nearbysearch/json?");
         sb.append("location=" + mLatitude + "," + mLongitude);
         sb.append("&radius=5000");
-        sb.append("&types=" + "restaurant");
+        sb.append("&types=" + type);
         sb.append("&sensor=true");
         sb.append("&key=AIzaSyCTU-xhtgLhx05jPIoUdc_5ncsds1jWP2E");
 
-        if(nextPage) {
+        if(nextPage && nextPageToken.length()>5) {
             Log.e("NPT", "append next page token : " + nextPageToken);
             sb.append("&pagetoken=" + nextPageToken);
         }
         Log.d("Map", "api: " + sb.toString());
 
         return sb;
+    }
+
+    public void execute(){
+        placesTask.execute(sbValue.toString());
     }
 
     public void executeNextResponse(){
@@ -48,13 +51,17 @@ public class PlaceResponse {
     }
 
     public ArrayList<com.example.nathanshumm.decided.model.api.Place> getPlace(){
-            Log.e("Parse_Size", " "+ parserTask.getPlaceList().size());
-        return parserTask.getPlaceList();
+            Log.e("Parse_Size", " "+ ParserTask.getPlaceList().size());
+        return ParserTask.getPlaceList();
     }
 
 
     public void setNextPageToken(){
-        this.nextPageToken = parserTask.getNextPageToken();
+        this.nextPageToken = ParserTask.getNextPageToken();
+    }
+
+    public void setType(String newType){
+        type = newType;
     }
 
 }

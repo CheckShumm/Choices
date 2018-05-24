@@ -20,7 +20,8 @@ public class Place_JSON {
         try {
             /** Retrieves all the elements in the 'places' array */
             jPlaces = jObject.getJSONArray("results");
-            nextPageToken = jObject.getString("next_page_token");
+                nextPageToken = jObject.getString("next_page_token");
+
         } catch (JSONException e) {
             e.printStackTrace();
         }
