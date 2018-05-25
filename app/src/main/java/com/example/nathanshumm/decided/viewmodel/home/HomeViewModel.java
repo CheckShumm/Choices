@@ -14,8 +14,8 @@ public class HomeViewModel extends ViewModel{
     private ArrayList<Place> newPlaceList = new ArrayList<Place>();
 
     public HomeViewModel() {
-        this.placeResponse = new PlaceResponse();
-        this.newPlaceList = placeResponse.getPlace();
+       // this.placeResponse = new PlaceResponse();
+       // this.newPlaceList = placeResponse.getPlace();
     }
 
     public void getPhotos(){

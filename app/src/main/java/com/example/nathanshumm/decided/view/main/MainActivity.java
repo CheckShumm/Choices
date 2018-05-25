@@ -40,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         ActivityMainBinding activityMainBinding = DataBindingUtil.setContentView(this,R.layout.activity_main);
         mainViewModel = new MainViewModel();
+        //mainViewModel.getHomeFragment().getResponse();
         viewPager = (CustomViewPager)findViewById(R.id.viewPager);
         setViewPager(viewPager);
         setToolbar();
@@ -78,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
                         getSupportActionBar().setTitle("Favorites");
                         return true;
                     case R.id.nav_home:
-                        mainViewModel.getHomeFragment().getResponse();
+                        //mainViewModel.getHomeFragment().getResponse();
                         viewPager.setCurrentItem(1);
                         getSupportActionBar().setTitle("Choices");
                         return true;

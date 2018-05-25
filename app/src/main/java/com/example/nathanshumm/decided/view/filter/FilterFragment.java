@@ -31,7 +31,7 @@ public class FilterFragment extends Fragment implements View.OnClickListener{
     Filter restaurantFilter;
     Filter clubFilter;
     Filter barFilter;
-    private PlaceResponse placeResponse = new PlaceResponse();
+    private PlaceResponse placeResponse;
     public FilterFragment() {
         // Required empty public constructor
     }
@@ -42,6 +42,8 @@ public class FilterFragment extends Fragment implements View.OnClickListener{
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View filterView = inflater.inflate(R.layout.fragment_filter, container, false);
+        Log.e("context", "filter context: " + this.getContext());
+        placeResponse = new PlaceResponse(this.getContext());
 
         // cafe Filter
         TextView cafeTitle = (TextView)filterView.findViewById(R.id.tv_cafe);
