@@ -16,7 +16,7 @@
             android:layout_height="370dp"
             android:orientation="vertical"
             android:layout_margin="16dp"
-            android:padding="8dp"
+            android:background="@color/colorPrimary"
             android:clipChildren="false"
             android:clipToPadding="false"
             android:gravity="center"

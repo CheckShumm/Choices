@@ -20,6 +20,8 @@ import com.example.nathanshumm.decided.viewmodel.filter.Filter;
 
 import org.w3c.dom.Text;
 
+import java.util.ArrayList;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -27,10 +29,11 @@ import org.w3c.dom.Text;
 public class FilterFragment extends Fragment implements View.OnClickListener{
 
 
-    Filter cafeFilter;
-    Filter restaurantFilter;
-    Filter clubFilter;
-    Filter barFilter;
+    private Filter cafeFilter;
+    private Filter restaurantFilter;
+    private Filter clubFilter;
+    private Filter barFilter;
+    private ArrayList<Filter> filterList = new ArrayList<>();
     private PlaceResponse placeResponse;
     public FilterFragment() {
         // Required empty public constructor
@@ -50,6 +53,7 @@ public class FilterFragment extends Fragment implements View.OnClickListener{
         ImageView cafeIcon = (ImageView)filterView.findViewById(R.id.iv_cafe);
         CardView cafeCard = (CardView)filterView.findViewById(R.id.cv_cafe);
         cafeFilter = new Filter(this.getContext(),cafeTitle, cafeIcon, cafeCard);
+        filterList.add(cafeFilter);
         cafeCard.setOnClickListener(this);
 
         // restaurant filter
@@ -57,6 +61,7 @@ public class FilterFragment extends Fragment implements View.OnClickListener{
         ImageView restaurantIcon = (ImageView)filterView.findViewById(R.id.iv_food);
         CardView restaurantCard = (CardView)filterView.findViewById(R.id.cv_food);
         restaurantFilter = new Filter(this.getContext(),restaurantTitle, restaurantIcon, restaurantCard);
+        filterList.add(restaurantFilter);
         restaurantCard.setOnClickListener(this);
 
         // club filter
@@ -64,6 +69,7 @@ public class FilterFragment extends Fragment implements View.OnClickListener{
         ImageView clubIcon = (ImageView)filterView.findViewById(R.id.iv_club);
         CardView clubCard = (CardView)filterView.findViewById(R.id.cv_club);
         clubFilter = new Filter(this.getContext(),clubTitle, clubIcon, clubCard);
+        filterList.add(clubFilter);
         clubCard.setOnClickListener(this);
 
         // club filter
@@ -71,6 +77,7 @@ public class FilterFragment extends Fragment implements View.OnClickListener{
         ImageView barIcon = (ImageView)filterView.findViewById(R.id.iv_bar);
         CardView barCard = (CardView)filterView.findViewById(R.id.cv_bar);
         barFilter = new Filter(this.getContext(),barTitle, barIcon, barCard);
+        filterList.add(barFilter);
         barCard.setOnClickListener(this);
 
         return filterView;
@@ -79,6 +86,7 @@ public class FilterFragment extends Fragment implements View.OnClickListener{
 
     @Override
     public void onClick(View v) {
+        deSelectAll();
         switch (v.getId()){
             case R.id.cv_cafe:
                 cafeFilter.onClick();
@@ -92,6 +100,13 @@ public class FilterFragment extends Fragment implements View.OnClickListener{
             case R.id.cv_bar:
                 barFilter.onClick();
                 break;
+        }
+    }
+
+    private void deSelectAll(){
+        for(int i = 0; i < filterList.size(); i++) {
+           if(filterList.get(i).isSelected())
+               filterList.get(i).onClick();
         }
     }
 }

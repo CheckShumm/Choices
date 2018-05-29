@@ -5,10 +5,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.nathanshumm.decided.R;
 import com.example.nathanshumm.decided.model.api.Place;
+import com.willy.ratingbar.ScaleRatingBar;
 
 import java.util.ArrayList;
 
@@ -41,10 +43,14 @@ public class FavoritesListAdapter extends BaseAdapter{
     public View getView(int position, View convertView, ViewGroup parent) {
         View v = View.inflate(mContext, R.layout.list_favorites, null);
 
-        TextView title = (TextView)v.findViewById(R.id.lv_title);
+        TextView placeName = (TextView)v.findViewById(R.id.lv_title);
         Button delBtn = (Button)v.findViewById(R.id.lv_button);
+        ImageView placeImage = (ImageView)v.findViewById(R.id.lv_image);
+        ScaleRatingBar scaleRatingBar = (ScaleRatingBar)v.findViewById(R.id.lv_simpleRatingBar);
 
-        title.setText(placeArrayList.get(position).getName());
+        scaleRatingBar.setRating((float)placeArrayList.get(position).getRating() );
+        placeImage.setImageBitmap(placeArrayList.get(position).getPhoto());
+        placeName.setText(placeArrayList.get(position).getName());
 
         return v;
     }
