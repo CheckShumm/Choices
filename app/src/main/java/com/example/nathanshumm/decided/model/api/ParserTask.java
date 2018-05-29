@@ -136,7 +136,7 @@ public class ParserTask extends AsyncTask<String, Integer, List<HashMap<String, 
                     CharSequence attribution = photoMetadata.getAttributions();
                     // Get a full-size bitmap for the photo.
 
-                    final Task<PlacePhotoResponse> photoResponse = geoDataClient.getScaledPhoto(photoMetadata,300,300);
+                    final Task<PlacePhotoResponse> photoResponse = geoDataClient.getScaledPhoto(photoMetadata,316,316);
                     photoResponse.addOnCompleteListener(new OnCompleteListener<PlacePhotoResponse>() {
                         @Override
                         public void onComplete(@NonNull Task<PlacePhotoResponse> task) {

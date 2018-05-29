@@ -89,7 +89,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Seri
         View homeView = inflater.inflate(R.layout.fragment_home, container, false);
         getResponse();
         setup(homeView);
-        reload();
+
         likeButton = (ImageView)homeView.findViewById(R.id.btn_like);
         dislikeButton = (ImageView)homeView.findViewById(R.id.btn_dislike);
         infoButton = (ImageView)homeView.findViewById(R.id.btn_info);
@@ -102,14 +102,20 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Seri
         return homeView;
     }
 
+    @Override
+    public void onResume() {
+        Log.d("resume","on resume");
+        super.onResume();
+    }
 
     public void paginate(){
-        cardStackView.setPaginationReserved();
+        //cardStackView.setPaginationReserved();
         newPlaceList =  placeResponse.getPlace();
         for(int i=1; i<newPlaceList.size(); i++){
             cardAdapter.add(newPlaceList.get(i));
+            Log.d("CardStackView", "Paginate cardadapter add: " + newPlaceList.get(i).getName());
         }
-        cardAdapter.notifyDataSetChanged();
+        //cardAdapter.notifyDataSetChanged();
         Log.d("paginate", "adapter size: " + cardAdapter.getCount());
     }
 
@@ -127,13 +133,19 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Seri
         cardStackView.setCardEventListener(new CardStackView.CardEventListener() {
             @Override
             public void onCardDragging(float percentX, float percentY) {
-                Log.d("CardStackView", "onCardDragging");
+               // Log.d("CardStackView", "onCardDragging");
             }
 
             @Override
             public void onCardSwiped(SwipeDirection direction) {
+                if (cardStackView.getTopIndex() == cardAdapter.getCount() - 10) {
+                    Log.d("CardStackView", "Paginate: " + cardStackView.getTopIndex() + "  count: " + cardAdapter.getCount());
+                    Log.d("CardStackView", "get next response");
+                    placeResponse.executeNextResponse();
+                }
+
                 if (cardStackView.getTopIndex() == cardAdapter.getCount() - 5) {
-                    Log.d("CardStackView", "Paginate: " + cardStackView.getTopIndex());
+                    Log.d("CardStackView", "Paginate: " + cardStackView.getTopIndex() + "  count: " + cardAdapter.getCount());
                     paginate();
                 }
 
@@ -217,8 +229,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Seri
         cardStackView.swipe(SwipeDirection.Right, cardAnimationSet, overlayAnimationSet);
     }
 
-    private void reload() {
-        cardStackView.setVisibility(View.GONE);
+    public void reload() {
+        cardStackView.setVisibility(View.INVISIBLE);
         progressBar.setVisibility(View.VISIBLE);
         new Handler().postDelayed(new Runnable() {
             @Override
@@ -227,6 +239,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Seri
                 newPlaceList =  placeResponse.getPlace();
                 for(int i=1; i<newPlaceList.size(); i++){
                     cardAdapter.add(newPlaceList.get(i));
+                    Log.d("CardStackView", "reload: " + newPlaceList.get(i).getName());
                 }
                 if(!cardAdapter.isEmpty())
                     currPlace = cardAdapter.getItem(cardStackView.getTopIndex());
@@ -234,7 +247,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Seri
                 cardStackView.setVisibility(View.VISIBLE);
                 progressBar.setVisibility(View.GONE);
             }
-        }, 1000);
+        }, 3000);
     }
 
 

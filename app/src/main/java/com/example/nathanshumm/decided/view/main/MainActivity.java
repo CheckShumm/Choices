@@ -85,6 +85,7 @@ public class MainActivity extends AppCompatActivity {
                         return true;
                     case R.id.nav_home:
                         mainViewModel.getHomeFragment().getResponse();
+                        mainViewModel.getHomeFragment().reload();
                         viewPager.setCurrentItem(1);
                         getSupportActionBar().setTitle("Choices");
                         return true;

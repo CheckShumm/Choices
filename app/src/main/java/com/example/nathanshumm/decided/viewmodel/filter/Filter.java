@@ -50,7 +50,7 @@ public class Filter {
         this.title.setTextColor(context.getResources().getColor(R.color.colorWhite));
         this.icon.setColorFilter(context.getResources().getColor(R.color.colorWhite));
         this.card.setCardBackgroundColor(context.getResources().getColor(R.color.colorPrimary));
-        placeResponse.setType(this.title.getText().toString());
+        placeResponse.setType(this.title.getText().toString().toLowerCase());
     }
 
     private void deSelect(){
