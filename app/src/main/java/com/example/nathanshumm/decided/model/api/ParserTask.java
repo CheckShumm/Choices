@@ -1,11 +1,18 @@
 package com.example.nathanshumm.decided.model.api;
 
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.google.android.gms.location.places.GeoDataClient;
+import com.google.android.gms.location.places.PlacePhotoMetadata;
+import com.google.android.gms.location.places.PlacePhotoMetadataBuffer;
 import com.google.android.gms.location.places.PlacePhotoMetadataResponse;
+import com.google.android.gms.location.places.PlacePhotoResponse;
 import com.google.android.gms.location.places.Places;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
@@ -13,6 +20,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
 import org.json.JSONObject;
@@ -26,8 +34,16 @@ public class ParserTask extends AsyncTask<String, Integer, List<HashMap<String, 
 
     JSONObject jObject;
     private boolean loaded;
+    private Context context;
+    private GeoDataClient geoDataClient;
     public static String nextPageToken;
     public static ArrayList<Place> placeList = new ArrayList<>();
+
+    public ParserTask(Context context) {
+        this.context = context;
+        Log.e("context", "parser task context = " + context);
+        geoDataClient = Places.getGeoDataClient(context,null);
+    }
 
     // Invoked by execute() method of this object
     @Override
@@ -86,7 +102,7 @@ public class ParserTask extends AsyncTask<String, Integer, List<HashMap<String, 
             double rating = Double.parseDouble(hmPlace.get("rating"));
 
             Place newPlace = new Place(lat, lng, name, vicinity, latLng, placeId, rating);
-
+            setPhoto(newPlace);
             placeList.add(newPlace);
             loaded = true;
         }
@@ -100,4 +116,41 @@ public class ParserTask extends AsyncTask<String, Integer, List<HashMap<String, 
         return placeList;
     }
 
+    public void setPhoto(final Place place) {
+        // Get Photo
+        final Task<PlacePhotoMetadataResponse> photoMetadataResponse = geoDataClient.
+                getPlacePhotos(place.getPlaceId());
+        Log.e("photoRef", "set photo 1 : " + place.getName());
+        photoMetadataResponse.addOnCompleteListener(new OnCompleteListener<PlacePhotoMetadataResponse>() {
+            @Override
+            public void onComplete(@NonNull Task<PlacePhotoMetadataResponse> task) {
+                // Get the list of photos.
+                PlacePhotoMetadataResponse photos = task.getResult();
+                // Get the PlacePhotoMetadataBuffer (metadata for all of the photos).
+                final PlacePhotoMetadataBuffer photoMetadataBuffer = photos.getPhotoMetadata();
+                // Get the first photo in the list.
+                if (photoMetadataBuffer.getCount() > 0) {
+                    final PlacePhotoMetadata photoMetadata = photoMetadataBuffer.get(0);
+
+                    // Get the attribution text.
+                    CharSequence attribution = photoMetadata.getAttributions();
+                    // Get a full-size bitmap for the photo.
+
+                    final Task<PlacePhotoResponse> photoResponse = geoDataClient.getScaledPhoto(photoMetadata,300,300);
+                    photoResponse.addOnCompleteListener(new OnCompleteListener<PlacePhotoResponse>() {
+                        @Override
+                        public void onComplete(@NonNull Task<PlacePhotoResponse> task) {
+                            PlacePhotoResponse photo = task.getResult();
+                            BitmapFactory.Options options = new BitmapFactory.Options();
+                            options.inSampleSize = 8;
+                            Bitmap bitmap = photo.getBitmap();
+                            Log.e("photoRef", "set photo 2 : " + place.getName());
+                            place.setPhoto(bitmap);
+                            photoMetadataBuffer.release();
+                        }
+                    });
+                }
+            }
+        });
+    }
 }

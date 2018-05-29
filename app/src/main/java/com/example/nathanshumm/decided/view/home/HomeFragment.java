@@ -1,10 +1,15 @@
 package com.example.nathanshumm.decided.view.home;
 
 
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
+import android.animation.PropertyValuesHolder;
+import android.animation.ValueAnimator;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.Image;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -14,6 +19,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Switch;
 import android.widget.TextView;
 
@@ -36,36 +42,40 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.wenchao.cardstack.CardStack;
 import com.willy.ratingbar.ScaleRatingBar;
+import com.yuyakaido.android.cardstackview.CardStackView;
+import com.yuyakaido.android.cardstackview.SwipeDirection;
 
 import org.w3c.dom.Text;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class HomeFragment extends Fragment implements CardStack.CardEventListener, View.OnClickListener {
+public class HomeFragment extends Fragment implements View.OnClickListener, Serializable{
 
-    private HomeViewModel homeViewModel;
     private PlaceResponse placeResponse;
 
     // buttons
     private ImageView likeButton;
     private ImageView dislikeButton;
     private ImageView infoButton;
-    private int stackIndex = 0;
 
-    private ScaleRatingBar scaleRatingBar; // Rating Bar
     private ArrayList<Place> newPlaceList = new ArrayList<Place>(); // Arraylist of places from places api
 
     // Card stack
-    private CardStack cardStack;
+    private CardStackView cardStackView;
     private CardAdapter cardAdapter;
+    private ProgressBar progressBar;
 
-    // clients
-    private GeoDataClient geoDataClient;
-    int counter = 0;
+    // Bundle
+    Bundle bundle = new Bundle();
+
+    // Favorites List
+    ArrayList<Place> favoritesList = new ArrayList<>();
+    Place currPlace;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -77,140 +87,173 @@ public class HomeFragment extends Fragment implements CardStack.CardEventListene
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View homeView = inflater.inflate(R.layout.fragment_home, container, false);
-
+        getResponse();
+        setup(homeView);
+        reload();
         likeButton = (ImageView)homeView.findViewById(R.id.btn_like);
         dislikeButton = (ImageView)homeView.findViewById(R.id.btn_dislike);
         infoButton = (ImageView)homeView.findViewById(R.id.btn_info);
 
-        cardStack = (CardStack)homeView.findViewById(R.id.card_stack);
-
-        cardStack.setContentResource(R.layout.card_layout);
-        cardStack.setStackMargin(20);
-
-        cardStack.setListener(this);
         likeButton.setOnClickListener(this);
         dislikeButton.setOnClickListener(this);
         infoButton.setOnClickListener(this);
 
-        initPlaces();
 
-
-        geoDataClient = Places.getGeoDataClient(this.getActivity(),null);
-        cardAdapter = new CardAdapter(getActivity().getApplicationContext(),0);
-        cardStack.setAdapter(cardAdapter);
-        setRetainInstance(true);
         return homeView;
     }
 
 
-    public void initPlaces(){
-        Log.e("npt", "initializing places, size: " + newPlaceList.size());
-        for(int i=1; i<newPlaceList.size(); i++){
-            if(newPlaceList.get(i).getPhoto() == null) {
-                setPhoto(newPlaceList.get(i));
-            }
-            Log.e("npt", "name: " + newPlaceList.get(i).getName());
-        }
-    }
-
-    public void fillCardStack(){
+    public void paginate(){
+        cardStackView.setPaginationReserved();
+        newPlaceList =  placeResponse.getPlace();
         for(int i=1; i<newPlaceList.size(); i++){
             cardAdapter.add(newPlaceList.get(i));
         }
+        cardAdapter.notifyDataSetChanged();
+        Log.d("paginate", "adapter size: " + cardAdapter.getCount());
     }
+
 
     public void getResponse(){
-        placeResponse = new PlaceResponse();
+        Log.e("context", "home fragment context = " + this.getContext());
+        placeResponse = new PlaceResponse(this.getContext());
         placeResponse.execute();
-        newPlaceList =  placeResponse.getPlace();
     }
 
-    public void setPhoto(final Place place){
-        // Get Photo
-        final Task<PlacePhotoMetadataResponse> photoMetadataResponse = geoDataClient.
-                getPlacePhotos(place.getPlaceId());
-        Log.e("photoRef", "set photo 1 : " + place.getName());
-        photoMetadataResponse.addOnCompleteListener(new OnCompleteListener<PlacePhotoMetadataResponse>() {
+    public void setup(View v){
+        progressBar = (ProgressBar)v.findViewById(R.id.card_stack_progress_bar);
+
+        cardStackView = (CardStackView)v.findViewById(R.id.card_stack);
+        cardStackView.setCardEventListener(new CardStackView.CardEventListener() {
             @Override
-            public void onComplete(@NonNull Task<PlacePhotoMetadataResponse> task) {
-                // Get the list of photos.
-                PlacePhotoMetadataResponse photos = task.getResult();
-                // Get the PlacePhotoMetadataBuffer (metadata for all of the photos).
-                final PlacePhotoMetadataBuffer photoMetadataBuffer = photos.getPhotoMetadata();
-                // Get the first photo in the list.
-                if(photoMetadataBuffer.getCount() > 0) {
-                    final PlacePhotoMetadata photoMetadata = photoMetadataBuffer.get(0);
+            public void onCardDragging(float percentX, float percentY) {
+                Log.d("CardStackView", "onCardDragging");
+            }
 
-                    // Get the attribution text.
-                    CharSequence attribution = photoMetadata.getAttributions();
-                    // Get a full-size bitmap for the photo.
-
-                    final Task<PlacePhotoResponse> photoResponse = geoDataClient.getScaledPhoto(photoMetadata,512,512);
-                    photoResponse.addOnCompleteListener(new OnCompleteListener<PlacePhotoResponse>() {
-                        @Override
-                        public void onComplete(@NonNull Task<PlacePhotoResponse> task) {
-                            PlacePhotoResponse photo = task.getResult();
-                            BitmapFactory.Options options = new BitmapFactory.Options();
-                            options.inSampleSize = 8;
-                            Bitmap bitmap = photo.getBitmap();
-                            Log.e("photoRef", "set photo 2 : " + place.getName());
-                            place.setPhoto(bitmap);
-                            photoMetadataBuffer.release();
-                        }
-                    });
+            @Override
+            public void onCardSwiped(SwipeDirection direction) {
+                if (cardStackView.getTopIndex() == cardAdapter.getCount() - 5) {
+                    Log.d("CardStackView", "Paginate: " + cardStackView.getTopIndex());
+                    paginate();
                 }
+
+                if(direction == SwipeDirection.Left){
+                }
+
+                if(direction == SwipeDirection.Right){
+                    favoritesList.add(currPlace);
+                    Log.d("CardStackView", "Liked: " + currPlace.getName());
+                }
+                if(!cardAdapter.isEmpty())
+                    currPlace = cardAdapter.getItem(cardStackView.getTopIndex());
+            }
+
+            @Override
+            public void onCardReversed() {
+
+            }
+
+            @Override
+            public void onCardMovedToOrigin() {
+
+            }
+
+            @Override
+            public void onCardClicked(int index) {
+
             }
         });
     }
 
-    @Override
-    public boolean swipeEnd(int i, float v) {
-        return v>300;
+    public void swipeLeft() {
+        View target = cardStackView.getTopView();
+        View targetOverlay = cardStackView.getTopView().getOverlayContainer();
+
+        ValueAnimator rotation = ObjectAnimator.ofPropertyValuesHolder(
+                target, PropertyValuesHolder.ofFloat("rotation", -10f));
+        rotation.setDuration(200);
+        ValueAnimator translateX = ObjectAnimator.ofPropertyValuesHolder(
+                target, PropertyValuesHolder.ofFloat("translationX", 0f, -2000f));
+        ValueAnimator translateY = ObjectAnimator.ofPropertyValuesHolder(
+                target, PropertyValuesHolder.ofFloat("translationY", 0f, 500f));
+        translateX.setStartDelay(100);
+        translateY.setStartDelay(100);
+        translateX.setDuration(500);
+        translateY.setDuration(500);
+        AnimatorSet cardAnimationSet = new AnimatorSet();
+        cardAnimationSet.playTogether(rotation, translateX, translateY);
+
+        ObjectAnimator overlayAnimator = ObjectAnimator.ofFloat(targetOverlay, "alpha", 0f, 1f);
+        overlayAnimator.setDuration(200);
+        AnimatorSet overlayAnimationSet = new AnimatorSet();
+        overlayAnimationSet.playTogether(overlayAnimator);
+
+        cardStackView.swipe(SwipeDirection.Left, cardAnimationSet, overlayAnimationSet);
     }
 
-    @Override
-    public boolean swipeStart(int i, float v) {
-        return false;
+    public void swipeRight() {
+        View target = cardStackView.getTopView();
+        View targetOverlay = cardStackView.getTopView().getOverlayContainer();
+
+        ValueAnimator rotation = ObjectAnimator.ofPropertyValuesHolder(
+                target, PropertyValuesHolder.ofFloat("rotation", 10f));
+        rotation.setDuration(200);
+        ValueAnimator translateX = ObjectAnimator.ofPropertyValuesHolder(
+                target, PropertyValuesHolder.ofFloat("translationX", 0f, 2000f));
+        ValueAnimator translateY = ObjectAnimator.ofPropertyValuesHolder(
+                target, PropertyValuesHolder.ofFloat("translationY", 0f, 500f));
+        translateX.setStartDelay(100);
+        translateY.setStartDelay(100);
+        translateX.setDuration(500);
+        translateY.setDuration(500);
+        AnimatorSet cardAnimationSet = new AnimatorSet();
+        cardAnimationSet.playTogether(rotation, translateX, translateY);
+
+        ObjectAnimator overlayAnimator = ObjectAnimator.ofFloat(targetOverlay, "alpha", 0f, 1f);
+        overlayAnimator.setDuration(200);
+        AnimatorSet overlayAnimationSet = new AnimatorSet();
+        overlayAnimationSet.playTogether(overlayAnimator);
+
+        cardStackView.swipe(SwipeDirection.Right, cardAnimationSet, overlayAnimationSet);
     }
 
-    @Override
-    public boolean swipeContinue(int i, float v, float v1) {
-        return false;
+    private void reload() {
+        cardStackView.setVisibility(View.GONE);
+        progressBar.setVisibility(View.VISIBLE);
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                cardAdapter = new CardAdapter(getActivity().getApplicationContext(),0);
+                newPlaceList =  placeResponse.getPlace();
+                for(int i=1; i<newPlaceList.size(); i++){
+                    cardAdapter.add(newPlaceList.get(i));
+                }
+                if(!cardAdapter.isEmpty())
+                    currPlace = cardAdapter.getItem(cardStackView.getTopIndex());
+                cardStackView.setAdapter(cardAdapter);
+                cardStackView.setVisibility(View.VISIBLE);
+                progressBar.setVisibility(View.GONE);
+            }
+        }, 1000);
     }
 
-    @Override
-    public void discarded(int i, int i1) {
-        stackIndex++;
-        Log.e("cardcounter", "count: " + cardAdapter.getCount());
-        if(stackIndex == 5 ){
-            placeResponse.executeNextResponse();
-        }
-        if (stackIndex == 13){
-            newPlaceList =  placeResponse.getPlace();
-            initPlaces();
-        }
-        if(stackIndex == 15){
-            fillCardStack();
-            stackIndex = -5;
-        }
-    }
-    @Override
-    public void topCardTapped() {
-
-    }
 
     @Override
     public void onClick(View v) {
         switch(v.getId()){
             case R.id.btn_like:
-                cardStack.discardTop(1);
+                swipeRight();
                 break;
             case R.id.btn_dislike:
-                cardStack.discardTop(0);
+                swipeLeft();
                 break;
             case R.id.btn_info:
-                fillCardStack();
+                reload();
                 break;
         }
+    }
+
+    public ArrayList<Place> getFavoritesList(){
+        return this.favoritesList;
     }
 }

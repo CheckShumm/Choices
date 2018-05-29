@@ -26,11 +26,12 @@ import org.w3c.dom.Text;
  */
 public class FilterFragment extends Fragment implements View.OnClickListener{
 
-    CardView cafeCard;
-    TextView cafeTitle;
-    ImageView cafeIcon;
+
     Filter cafeFilter;
-    private PlaceResponse placeResponse = new PlaceResponse();
+    Filter restaurantFilter;
+    Filter clubFilter;
+    Filter barFilter;
+    private PlaceResponse placeResponse;
     public FilterFragment() {
         // Required empty public constructor
     }
@@ -41,6 +42,8 @@ public class FilterFragment extends Fragment implements View.OnClickListener{
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View filterView = inflater.inflate(R.layout.fragment_filter, container, false);
+        Log.e("context", "filter context: " + this.getContext());
+        placeResponse = new PlaceResponse(this.getContext());
 
         // cafe Filter
         TextView cafeTitle = (TextView)filterView.findViewById(R.id.tv_cafe);
@@ -48,19 +51,46 @@ public class FilterFragment extends Fragment implements View.OnClickListener{
         CardView cafeCard = (CardView)filterView.findViewById(R.id.cv_cafe);
         cafeFilter = new Filter(this.getContext(),cafeTitle, cafeIcon, cafeCard);
         cafeCard.setOnClickListener(this);
+
+        // restaurant filter
+        TextView restaurantTitle = (TextView)filterView.findViewById(R.id.tv_food);
+        ImageView restaurantIcon = (ImageView)filterView.findViewById(R.id.iv_food);
+        CardView restaurantCard = (CardView)filterView.findViewById(R.id.cv_food);
+        restaurantFilter = new Filter(this.getContext(),restaurantTitle, restaurantIcon, restaurantCard);
+        restaurantCard.setOnClickListener(this);
+
+        // club filter
+        TextView clubTitle = (TextView)filterView.findViewById(R.id.tv_club);
+        ImageView clubIcon = (ImageView)filterView.findViewById(R.id.iv_club);
+        CardView clubCard = (CardView)filterView.findViewById(R.id.cv_club);
+        clubFilter = new Filter(this.getContext(),clubTitle, clubIcon, clubCard);
+        clubCard.setOnClickListener(this);
+
+        // club filter
+        TextView barTitle = (TextView)filterView.findViewById(R.id.tv_bar);
+        ImageView barIcon = (ImageView)filterView.findViewById(R.id.iv_bar);
+        CardView barCard = (CardView)filterView.findViewById(R.id.cv_bar);
+        barFilter = new Filter(this.getContext(),barTitle, barIcon, barCard);
+        barCard.setOnClickListener(this);
+
         return filterView;
     }
 
-    public void selectFilter(TextView title, ImageView icon, RelativeLayout layout){
-
-    }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.cv_cafe:
                 cafeFilter.onClick();
-                placeResponse.setType("cafe");
+                break;
+            case R.id.cv_food:
+                restaurantFilter.onClick();
+                break;
+            case R.id.cv_club:
+                clubFilter.onClick();
+                break;
+            case R.id.cv_bar:
+                barFilter.onClick();
                 break;
         }
     }

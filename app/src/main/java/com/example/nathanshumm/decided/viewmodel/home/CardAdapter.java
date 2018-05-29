@@ -4,7 +4,9 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -26,6 +28,8 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.willy.ratingbar.ScaleRatingBar;
 
+import java.util.ArrayList;
+
 
 public class CardAdapter extends ArrayAdapter<Place>{
 
@@ -40,21 +44,41 @@ public class CardAdapter extends ArrayAdapter<Place>{
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-        placeText = (TextView)convertView.findViewById(R.id.tv_places);
-        placeImage = (ImageView)convertView.findViewById(R.id.iv_places);
-        scaleRatingBar = convertView.findViewById(R.id.simpleRatingBar);
 
+        ViewHolder holder;
+
+        if (convertView == null){
+            LayoutInflater inflater = LayoutInflater.from(getContext());
+            convertView = inflater.inflate(R.layout.card_layout, parent, false);
+            holder = new ViewHolder(convertView);
+            convertView.setTag(holder);
+        } else {
+            holder = (ViewHolder)convertView.getTag();
+        }
         // Set Text
-        placeText.setText(getItem(position).getName());
+        holder.placeText.setText(getItem(position).getName());
 
         // Set Rating
-        scaleRatingBar.setRating((float)getItem(position).getRating());
+        holder.scaleRatingBar.setRating((float)getItem(position).getRating());
 
         // Set Photo
-        placeImage.setImageBitmap(getItem(position).getPhoto());
+        holder.placeImage.setImageBitmap(getItem(position).getPhoto());
         Log.e("photoRef", "display photo: " + getItem(position).getName());
 
 
         return convertView;
     }
+
+    private static class ViewHolder {
+        public TextView placeText;
+        public ScaleRatingBar scaleRatingBar;
+        public ImageView placeImage;
+
+        public ViewHolder(View view) {
+            this.placeText = (TextView) view.findViewById(R.id.tv_places);
+            this.scaleRatingBar = (ScaleRatingBar) view.findViewById(R.id.simpleRatingBar);
+            this.placeImage = (ImageView) view.findViewById(R.id.iv_places);
+        }
+    }
+
 }

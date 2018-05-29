@@ -3,20 +3,39 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     tools:context=".view.home.HomeFragment">
 
-    <com.wenchao.cardstack.CardStack
-        android:id="@+id/card_stack"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="370dp"
-        android:orientation="vertical"
-        android:layout_margin="16dp"
-        android:padding="8dp"
-        android:clipChildren="false"
-        android:clipToPadding="false"
-        android:gravity="center">
-    </com.wenchao.cardstack.CardStack>
+        android:layout_height="wrap_content">
+        <com.yuyakaido.android.cardstackview.CardStackView
+            android:id="@+id/card_stack"
+            android:layout_width="match_parent"
+            android:layout_height="370dp"
+            android:orientation="vertical"
+            android:layout_margin="16dp"
+            android:padding="8dp"
+            android:clipChildren="false"
+            android:clipToPadding="false"
+            android:gravity="center"
+            app:visibleCount="3"
+            app:swipeThreshold="0.75"
+            app:translationDiff="12"
+            app:scaleDiff="0.02"
+            app:stackFrom="top"
+            app:elevationEnabled="true"
+            app:swipeEnabled="true"
+            app:swipeDirection="freedom_no_bottom">
+        </com.yuyakaido.android.cardstackview.CardStackView>
+        <ProgressBar
+            android:id="@+id/card_stack_progress_bar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"/>
+    </RelativeLayout>
+
 
     <RelativeLayout
         android:layout_width="match_parent"

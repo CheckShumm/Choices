@@ -1,5 +1,6 @@
 package com.example.nathanshumm.decided.model.api;
 
+import android.content.Context;
 import android.util.Log;
 
 import com.google.android.gms.location.places.Place;
@@ -10,11 +11,15 @@ public class PlaceResponse {
 
     private static String type = "restaurant";
     private String nextPageToken;
+    private Context context;
     private StringBuilder sbValue = new StringBuilder(sbMethod(false));
-    private PlacesTask placesTask = new PlacesTask();
-    private ParserTask parserTask = new ParserTask();
+    private PlacesTask placesTask;
+    private ParserTask parserTask;
 
-    public PlaceResponse() {
+    public PlaceResponse(Context context) {
+        Log.e("context", "place response task context = " + context);
+        this.context = context;
+        placesTask = new PlacesTask(context);
     }
 
     private StringBuilder sbMethod(boolean nextPage) {
@@ -46,7 +51,7 @@ public class PlaceResponse {
     public void executeNextResponse(){
         setNextPageToken();
         sbValue = new StringBuilder(sbMethod(true));
-        placesTask = new PlacesTask();
+        placesTask = new PlacesTask(this.context);
         placesTask.execute(sbValue.toString());
     }
 
@@ -62,6 +67,7 @@ public class PlaceResponse {
 
     public void setType(String newType){
         type = newType;
+        Log.e("filter", "set type: " + newType);
     }
 
 }

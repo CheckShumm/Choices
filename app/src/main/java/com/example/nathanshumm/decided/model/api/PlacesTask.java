@@ -1,5 +1,6 @@
 package com.example.nathanshumm.decided.model.api;
 
+import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -14,8 +15,16 @@ import java.util.ArrayList;
 public class PlacesTask extends AsyncTask<String, Integer, String> {
 
     String data = null;
+    private Context context;
     private ArrayList<Place> placeList;
-    ParserTask parserTask = new ParserTask();
+    ParserTask parserTask;
+
+
+    public PlacesTask(Context context) {
+        Log.e("context", "places task context = " + context);
+        this.context = context;
+        parserTask = new ParserTask(context);
+    }
 
     // Invoked by execute() method of this object
     @Override
