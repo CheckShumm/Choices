@@ -7,6 +7,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.nathanshumm.decided.R;
+import com.example.nathanshumm.decided.model.api.PlaceResponse;
 
 public class Filter {
 
@@ -15,6 +16,7 @@ public class Filter {
     private CardView card;
     private boolean selected;
     private Context context;
+    private PlaceResponse placeResponse;
 
     public Filter(Context context) {
         this.context = context;
@@ -26,6 +28,8 @@ public class Filter {
         this.card = card;
         this.selected = false;
         this.context = context;
+
+        placeResponse = new PlaceResponse(this.context);
     }
 
     public void onClick(){
@@ -38,17 +42,24 @@ public class Filter {
         }
     }
 
+    public boolean isSelected() {
+        return this.selected;
+    }
+
     private void select(){
         this.title.setTextColor(context.getResources().getColor(R.color.colorWhite));
         this.icon.setColorFilter(context.getResources().getColor(R.color.colorWhite));
         this.card.setCardBackgroundColor(context.getResources().getColor(R.color.colorPrimary));
+        placeResponse.setType(this.title.getText().toString());
     }
 
     private void deSelect(){
         this.title.setTextColor(context.getResources().getColor(R.color.colorPrimary));
         this.icon.setColorFilter(context.getResources().getColor(R.color.colorPrimary));
         this.card.setCardBackgroundColor(context.getResources().getColor(R.color.colorWhite));
+        placeResponse.setType("null");
     }
+
 
     public TextView getTitle() {
         return title;

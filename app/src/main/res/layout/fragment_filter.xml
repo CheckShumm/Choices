@@ -39,7 +39,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:contentDescription="cafe"
+                        android:contentDescription="@string/filter_cafe"
                         android:src="@drawable/coffee_cup"
                         />
                     <TextView
@@ -50,7 +50,7 @@
                         android:textSize="18sp"
                         android:textColor="@color/colorPrimary"
                         android:layout_gravity="center"
-                        android:text="Cafe"/>
+                        android:text="@string/filter_cafe"/>
                 </LinearLayout>
             </android.support.v7.widget.CardView>
 
@@ -79,7 +79,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:contentDescription="food"
+                        android:contentDescription="@string/filter_restaurant"
                         android:src="@drawable/dish"
                         />
                     <TextView
@@ -90,7 +90,7 @@
                         android:textSize="18sp"
                         android:layout_gravity="center"
                         android:textColor="@color/colorPrimary"
-                        android:text="Food"/>
+                        android:text="@string/filter_restaurant"/>
                 </LinearLayout>
 
             </android.support.v7.widget.CardView>
@@ -119,7 +119,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:contentDescription="bars"
+                        android:contentDescription="@string/filter_bar"
                         android:src="@drawable/pint"
                         />
                     <TextView
@@ -130,7 +130,7 @@
                         android:textSize="18sp"
                         android:textColor="@color/colorPrimary"
                         android:layout_gravity="center"
-                        android:text="Bar"/>
+                        android:text="@string/filter_bar"/>
                 </LinearLayout>
 
             </android.support.v7.widget.CardView>
@@ -159,7 +159,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:contentDescription="clubs"
+                        android:contentDescription="@string/filter_club"
                         android:src="@drawable/disco_ball"
                         />
                     <TextView
@@ -170,7 +170,7 @@
                         android:textSize="18sp"
                         android:layout_gravity="center"
                         android:textColor="@color/colorPrimary"
-                        android:text="Clubs"/>
+                        android:text="@string/filter_club"/>
                 </LinearLayout>
 
             </android.support.v7.widget.CardView>

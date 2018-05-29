@@ -82,19 +82,15 @@ public class FilterFragment extends Fragment implements View.OnClickListener{
         switch (v.getId()){
             case R.id.cv_cafe:
                 cafeFilter.onClick();
-                placeResponse.setType("cafe");
                 break;
             case R.id.cv_food:
                 restaurantFilter.onClick();
-                placeResponse.setType("restaurant");
                 break;
             case R.id.cv_club:
                 clubFilter.onClick();
-                placeResponse.setType("club");
                 break;
             case R.id.cv_bar:
                 barFilter.onClick();
-                placeResponse.setType("bar");
                 break;
         }
     }

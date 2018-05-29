@@ -67,6 +67,7 @@ public class PlaceResponse {
 
     public void setType(String newType){
         type = newType;
+        Log.e("filter", "set type: " + newType);
     }
 
 }

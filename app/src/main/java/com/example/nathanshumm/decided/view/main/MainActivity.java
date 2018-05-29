@@ -20,12 +20,15 @@ import android.view.Window;
 import com.example.nathanshumm.decided.R;
 import com.example.nathanshumm.decided.databinding.ActivityLoginBinding;
 import com.example.nathanshumm.decided.databinding.ActivityMainBinding;
+import com.example.nathanshumm.decided.model.api.Place;
 import com.example.nathanshumm.decided.view.home.HomeFragment;
 import com.example.nathanshumm.decided.viewmodel.login.LoginViewModel;
 import com.example.nathanshumm.decided.viewmodel.login.LoginViewModelFactory;
 import com.example.nathanshumm.decided.viewmodel.main.CustomViewPager;
 import com.example.nathanshumm.decided.viewmodel.main.MainViewModel;
 import com.example.nathanshumm.decided.viewmodel.main.ViewPagerAdapter;
+
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -75,11 +78,13 @@ public class MainActivity extends AppCompatActivity {
                         getSupportActionBar().setTitle("Filter");
                         return true;
                     case R.id.nav_favorites:
+                        ArrayList<Place> favoritesList = mainViewModel.getHomeFragment().getFavoritesList();
+                        mainViewModel.getFavoritesFragment().loadList(favoritesList);
                         viewPager.setCurrentItem(2);
                         getSupportActionBar().setTitle("Favorites");
                         return true;
                     case R.id.nav_home:
-                        //mainViewModel.getHomeFragment().getResponse();
+                        mainViewModel.getHomeFragment().getResponse();
                         viewPager.setCurrentItem(1);
                         getSupportActionBar().setTitle("Choices");
                         return true;
@@ -90,11 +95,6 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void setFragment(Fragment fragment) {
-        //FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        //fragmentTransaction.replace(R.id.m_Frame, fragment);
-        //fragmentTransaction.commit();
-    }
 
     private void setNavigationDrawer(){
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
