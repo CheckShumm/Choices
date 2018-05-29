@@ -52,7 +52,7 @@ public class FilterFragment extends Fragment implements View.OnClickListener{
         TextView cafeTitle = (TextView)filterView.findViewById(R.id.tv_cafe);
         ImageView cafeIcon = (ImageView)filterView.findViewById(R.id.iv_cafe);
         CardView cafeCard = (CardView)filterView.findViewById(R.id.cv_cafe);
-        cafeFilter = new Filter(this.getContext(),cafeTitle, cafeIcon, cafeCard);
+        cafeFilter = new Filter(this.getContext(),cafeTitle, cafeIcon, cafeCard, "cafe");
         filterList.add(cafeFilter);
         cafeCard.setOnClickListener(this);
 
@@ -60,7 +60,7 @@ public class FilterFragment extends Fragment implements View.OnClickListener{
         TextView restaurantTitle = (TextView)filterView.findViewById(R.id.tv_food);
         ImageView restaurantIcon = (ImageView)filterView.findViewById(R.id.iv_food);
         CardView restaurantCard = (CardView)filterView.findViewById(R.id.cv_food);
-        restaurantFilter = new Filter(this.getContext(),restaurantTitle, restaurantIcon, restaurantCard);
+        restaurantFilter = new Filter(this.getContext(),restaurantTitle, restaurantIcon, restaurantCard, "restaurant");
         filterList.add(restaurantFilter);
         restaurantCard.setOnClickListener(this);
 
@@ -68,7 +68,7 @@ public class FilterFragment extends Fragment implements View.OnClickListener{
         TextView clubTitle = (TextView)filterView.findViewById(R.id.tv_club);
         ImageView clubIcon = (ImageView)filterView.findViewById(R.id.iv_club);
         CardView clubCard = (CardView)filterView.findViewById(R.id.cv_club);
-        clubFilter = new Filter(this.getContext(),clubTitle, clubIcon, clubCard);
+        clubFilter = new Filter(this.getContext(),clubTitle, clubIcon, clubCard, "night_club");
         filterList.add(clubFilter);
         clubCard.setOnClickListener(this);
 
@@ -76,7 +76,7 @@ public class FilterFragment extends Fragment implements View.OnClickListener{
         TextView barTitle = (TextView)filterView.findViewById(R.id.tv_bar);
         ImageView barIcon = (ImageView)filterView.findViewById(R.id.iv_bar);
         CardView barCard = (CardView)filterView.findViewById(R.id.cv_bar);
-        barFilter = new Filter(this.getContext(),barTitle, barIcon, barCard);
+        barFilter = new Filter(this.getContext(),barTitle, barIcon, barCard, "bar");
         filterList.add(barFilter);
         barCard.setOnClickListener(this);
 

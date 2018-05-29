@@ -149,10 +149,10 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Seri
                     paginate();
                 }
 
-                if(direction == SwipeDirection.Left){
+                if(direction == SwipeDirection.Right){
                 }
 
-                if(direction == SwipeDirection.Right){
+                if(direction == SwipeDirection.Left){
                     favoritesList.add(currPlace);
                     Log.d("CardStackView", "Liked: " + currPlace.getName());
                 }
@@ -247,7 +247,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Seri
                 cardStackView.setVisibility(View.VISIBLE);
                 progressBar.setVisibility(View.GONE);
             }
-        }, 3000);
+        }, 4000);
     }
 
 

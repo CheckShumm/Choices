@@ -71,8 +71,7 @@
                     android:layout_gravity="center_horizontal|center_vertical"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:background="@color/colorWhite">
+                    android:orientation="vertical">
                     <ImageView
                         android:layout_marginTop="8dp"
                         android:id="@+id/iv_food"
@@ -80,7 +79,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:contentDescription="@string/filter_restaurant"
-                        android:src="@drawable/dish"
+                        android:src="@drawable/restaurant"
                         />
                     <TextView
                         android:id="@+id/tv_food"
@@ -112,15 +111,14 @@
                     android:layout_gravity="center_horizontal|center_vertical"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:onClick="@{viewModel::onBarSelected}">
+                    android:orientation="vertical">
                     <ImageView
                         android:id="@+id/iv_bar"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:contentDescription="@string/filter_bar"
-                        android:src="@drawable/pint"
+                        android:src="@drawable/bar"
                         />
                     <TextView
                         android:id="@+id/tv_bar"
@@ -152,15 +150,14 @@
                     android:layout_gravity="center_horizontal|center_vertical"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:background="@color/colorWhite">
+                    android:orientation="vertical">
                     <ImageView
                         android:id="@+id/iv_club"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:contentDescription="@string/filter_club"
-                        android:src="@drawable/disco_ball"
+                        android:src="@drawable/night_club"
                         />
                     <TextView
                         android:id="@+id/tv_club"
