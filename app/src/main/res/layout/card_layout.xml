@@ -16,11 +16,12 @@
         <ImageView
             android:id="@+id/iv_places"
             android:layout_width="match_parent"
-            android:layout_height="316dp"
+            android:layout_height="330dp"
             android:scaleType="centerCrop"/>
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:paddingTop="4dp"
             android:orientation="vertical"
             android:background="@color/colorWhite">
             <TextView
@@ -32,8 +33,17 @@
                 android:textColor="@color/colorPrimary"
                 android:layout_marginStart="8dp"
                 android:text="Google Place API Response"/>
-            <com.willy.ratingbar.ScaleRatingBar
+            <TextView
+                android:id="@+id/tv_address"
                 android:layout_below="@+id/tv_places"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:textSize="12sp"
+                android:textColor="@color/colorPrimary"
+                android:layout_marginStart="8dp"
+                android:text="Google Place Address"/>
+            <com.willy.ratingbar.ScaleRatingBar
                 android:layout_alignParentRight="true"
                 xmlns:app="http://schemas.android.com/apk/res-auto"
                 android:id="@+id/simpleRatingBar"
@@ -43,17 +53,19 @@
                 app:srb_numStars="5"
                 app:srb_minimumStars="1"
                 app:srb_rating="0"
-                app:srb_starWidth="20dp"
-                app:srb_starHeight="20dp"
+                app:srb_starWidth="16dp"
+                app:srb_starHeight="16dp"
                 app:srb_starPadding="3dp"
                 app:srb_stepSize="0.1"
+                app:srb_clickable="false"
+                app:srb_scrollable="false"
                 app:srb_isIndicator="false"
                 app:srb_clearRatingEnabled="true"
                 app:srb_drawableEmpty="@drawable/star_empty"
                 app:srb_drawableFilled="@drawable/star_filled">
             </com.willy.ratingbar.ScaleRatingBar>
             <com.willy.ratingbar.ScaleRatingBar
-                android:layout_above="@+id/simpleRatingBar"
+                android:layout_below="@+id/simpleRatingBar"
                 android:layout_alignParentRight="true"
                 xmlns:app="http://schemas.android.com/apk/res-auto"
                 android:id="@+id/priceRating"
@@ -63,10 +75,12 @@
                 app:srb_numStars="3"
                 app:srb_minimumStars="1"
                 app:srb_rating="0"
-                app:srb_starWidth="20dp"
-                app:srb_starHeight="20dp"
+                app:srb_starWidth="16dp"
+                app:srb_starHeight="16dp"
                 app:srb_starPadding="3dp"
                 app:srb_stepSize="0.1"
+                app:srb_clickable="false"
+                app:srb_scrollable="false"
                 app:srb_isIndicator="false"
                 app:srb_clearRatingEnabled="true"
                 app:srb_drawableEmpty="@drawable/price_empty"

@@ -15,6 +15,9 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -75,7 +78,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Seri
 
     // Favorites List
     ArrayList<Place> favoritesList = new ArrayList<>();
-    Place currPlace;
+    public Place currPlace;
+    public String currType;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -98,6 +102,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Seri
         dislikeButton.setOnClickListener(this);
         infoButton.setOnClickListener(this);
 
+        setHasOptionsMenu(true);
 
         return homeView;
     }
@@ -237,6 +242,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Seri
             public void run() {
                 cardAdapter = new CardAdapter(getActivity().getApplicationContext(),0);
                 newPlaceList =  placeResponse.getPlace();
+                currType = placeResponse.getType();
                 for(int i=1; i<newPlaceList.size(); i++){
                     cardAdapter.add(newPlaceList.get(i));
                     Log.d("CardStackView", "reload: " + newPlaceList.get(i).getName());
@@ -250,15 +256,30 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Seri
         }, 4000);
     }
 
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.home_overflow, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch(item.getItemId()){
+            case R.id.refresh:
+                reload();
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
     @Override
     public void onClick(View v) {
         switch(v.getId()){
             case R.id.btn_like:
-                swipeRight();
+                swipeLeft();
                 break;
             case R.id.btn_dislike:
-                swipeLeft();
+                swipeRight();
                 break;
             case R.id.btn_info:
                 reload();
@@ -268,5 +289,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Seri
 
     public ArrayList<Place> getFavoritesList(){
         return this.favoritesList;
+    }
+
+    public String getCurrentType(){
+        return currType;
     }
 }

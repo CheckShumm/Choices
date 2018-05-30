@@ -33,6 +33,9 @@ public class FilterFragment extends Fragment implements View.OnClickListener{
     private Filter restaurantFilter;
     private Filter clubFilter;
     private Filter barFilter;
+
+    private String currentType = "none";
+    private Boolean newFilter = true;
     private ArrayList<Filter> filterList = new ArrayList<>();
     private PlaceResponse placeResponse;
     public FilterFragment() {
@@ -86,27 +89,48 @@ public class FilterFragment extends Fragment implements View.OnClickListener{
 
     @Override
     public void onClick(View v) {
-        deSelectAll();
         switch (v.getId()){
             case R.id.cv_cafe:
                 cafeFilter.onClick();
+                newFilterSelected(cafeFilter.getType());
                 break;
             case R.id.cv_food:
                 restaurantFilter.onClick();
+                newFilterSelected(restaurantFilter.getType());
                 break;
             case R.id.cv_club:
                 clubFilter.onClick();
+                newFilterSelected(clubFilter.getType());
                 break;
             case R.id.cv_bar:
                 barFilter.onClick();
+                newFilterSelected(barFilter.getType());
                 break;
         }
     }
 
-    private void deSelectAll(){
+    private void deSelectAll(String type){
         for(int i = 0; i < filterList.size(); i++) {
-           if(filterList.get(i).isSelected())
+           if(filterList.get(i).isSelected() && !filterList.get(i).getType().equals(type))
                filterList.get(i).onClick();
         }
     }
+
+    public void newFilterSelected(String type){
+        deSelectAll(type);
+        if(type.equals(currentType) || currentType.equals("none")) {
+            currentType = type;
+            newFilter = false;
+            Log.d("newFilter", "setfilter false");
+        } else {
+            newFilter = true;
+            currentType = type;
+            Log.d("newFilter", "setfilter true");
+        }
+    }
+
+    public String getCurrentType(){
+        return currentType;
+    }
+
 }

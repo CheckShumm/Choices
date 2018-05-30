@@ -40,11 +40,19 @@ public class FavoritesListAdapter extends BaseAdapter{
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         View v = View.inflate(mContext, R.layout.list_favorites, null);
 
         TextView placeName = (TextView)v.findViewById(R.id.lv_title);
         Button delBtn = (Button)v.findViewById(R.id.lv_button);
+        delBtn.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                placeArrayList.remove(position);
+                notifyDataSetChanged();
+            }
+        });
+
         ImageView placeImage = (ImageView)v.findViewById(R.id.lv_image);
         ScaleRatingBar scaleRatingBar = (ScaleRatingBar)v.findViewById(R.id.lv_simpleRatingBar);
 
@@ -54,4 +62,5 @@ public class FavoritesListAdapter extends BaseAdapter{
 
         return v;
     }
+
 }

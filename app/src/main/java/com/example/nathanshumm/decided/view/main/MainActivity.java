@@ -85,7 +85,16 @@ public class MainActivity extends AppCompatActivity {
                         return true;
                     case R.id.nav_home:
                         mainViewModel.getHomeFragment().getResponse();
-                        mainViewModel.getHomeFragment().reload();
+                        if(!mainViewModel.getFilterFragment().getCurrentType().equals(
+                                mainViewModel.getHomeFragment().getCurrentType()
+                        )) {
+                            Log.d("reload", "filter type 1: " + mainViewModel.getFilterFragment().getCurrentType()
+                                    + "\n home type 1: " + mainViewModel.getHomeFragment().getCurrentType());
+                            mainViewModel.getHomeFragment().reload();
+                        }else{
+                            Log.d("reload", "filter type 2: " + mainViewModel.getFilterFragment().getCurrentType()
+                                    + "\n home type 2: " + mainViewModel.getHomeFragment().getCurrentType());
+                        }
                         viewPager.setCurrentItem(1);
                         getSupportActionBar().setTitle("Choices");
                         return true;

@@ -13,13 +13,16 @@ public class Place {
     private LatLng latLng;
     private String placeId;
     private double rating;
+
+
+    private double priceLevel;
     private Bitmap photo;
 
     public Place() {
     }
 
 
-    public Place(double lat, double lng, String name, String vicinity, LatLng latLng, String placeId, double rating) {
+    public Place(double lat, double lng, String name, String vicinity, LatLng latLng, String placeId, double rating, double priceLevel) {
         this.lat = lat;
         this.lng = lng;
         this.name = name;
@@ -27,6 +30,7 @@ public class Place {
         this.latLng = latLng;
         this.placeId = placeId;
         this.rating = rating;
+        this.priceLevel = priceLevel;
     }
 
     public double getLat() {
@@ -91,5 +95,13 @@ public class Place {
 
     public void setPhoto(Bitmap photo) {
         this.photo = photo;
+    }
+
+    public double getPriceLevel() {
+        return priceLevel;
+    }
+
+    public void setPriceLevel(double priceLevel) {
+        this.priceLevel = priceLevel;
     }
 }

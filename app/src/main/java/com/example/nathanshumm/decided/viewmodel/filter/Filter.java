@@ -17,6 +17,7 @@ public class Filter {
     private boolean selected;
     private Context context;
     private PlaceResponse placeResponse;
+
     private String type;
 
     public Filter(Context context) {
@@ -79,4 +80,7 @@ public class Filter {
         this.icon = icon;
     }
 
+    public String getType() {
+        return type;
+    }
 }

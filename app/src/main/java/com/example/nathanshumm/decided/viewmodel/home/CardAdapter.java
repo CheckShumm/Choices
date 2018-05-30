@@ -58,8 +58,14 @@ public class CardAdapter extends ArrayAdapter<Place>{
         // Set Text
         holder.placeText.setText(getItem(position).getName());
 
+        // Set Address
+        holder.placeAddress.setText(getItem(position).getVicinity());
+
         // Set Rating
         holder.scaleRatingBar.setRating((float)getItem(position).getRating());
+
+        // Set Price
+        holder.priceRatingBar.setRating((float)getItem(position).getPriceLevel());
 
         // Set Photo
         holder.placeImage.setImageBitmap(getItem(position).getPhoto());
@@ -71,13 +77,17 @@ public class CardAdapter extends ArrayAdapter<Place>{
 
     private static class ViewHolder {
         public TextView placeText;
+        public TextView placeAddress;
         public ScaleRatingBar scaleRatingBar;
+        public ScaleRatingBar priceRatingBar;
         public ImageView placeImage;
 
         public ViewHolder(View view) {
             this.placeText = (TextView) view.findViewById(R.id.tv_places);
             this.scaleRatingBar = (ScaleRatingBar) view.findViewById(R.id.simpleRatingBar);
             this.placeImage = (ImageView) view.findViewById(R.id.iv_places);
+            this.priceRatingBar = (ScaleRatingBar) view.findViewById(R.id.priceRating);
+            this.placeAddress = (TextView) view.findViewById(R.id.tv_address);
         }
     }
 
