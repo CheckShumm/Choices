@@ -91,7 +91,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Seri
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View homeView = inflater.inflate(R.layout.fragment_home, container, false);
-        getResponse();
+
         setup(homeView);
 
         likeButton = (ImageView)homeView.findViewById(R.id.btn_like);
@@ -125,9 +125,11 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Seri
     }
 
 
-    public void getResponse(){
-        Log.e("context", "home fragment context = " + this.getContext());
+    public void getResponse(double latitude, double longitude){
+        Log.d("LatLon", "Lat: " + latitude + "  long: " + longitude);
         placeResponse = new PlaceResponse(this.getContext());
+        placeResponse.setLatitude(latitude);
+        placeResponse.setLongitude(longitude);
         placeResponse.execute();
     }
 

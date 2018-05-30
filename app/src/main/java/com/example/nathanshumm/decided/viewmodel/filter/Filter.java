@@ -60,7 +60,6 @@ public class Filter {
         this.title.setTextColor(context.getResources().getColor(R.color.colorPrimary));
         this.icon.setColorFilter(context.getResources().getColor(R.color.colorPrimary));
         this.card.setCardBackgroundColor(context.getResources().getColor(R.color.colorWhite));
-        placeResponse.setType("null");
     }
 
 
