@@ -70,4 +70,8 @@ public class PlaceResponse {
         Log.e("filter", "set type: " + newType);
     }
 
+    public String getType(){
+        return this.type;
+    }
+
 }

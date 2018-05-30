@@ -18,16 +18,19 @@ public class Filter {
     private Context context;
     private PlaceResponse placeResponse;
 
+    private String type;
+
     public Filter(Context context) {
         this.context = context;
     }
 
-    public Filter(Context context, TextView title, ImageView icon, CardView card) {
+    public Filter(Context context, TextView title, ImageView icon, CardView card, String type) {
         this.title = title;
         this.icon = icon;
         this.card = card;
         this.selected = false;
         this.context = context;
+        this.type = type;
 
         placeResponse = new PlaceResponse(this.context);
     }
@@ -50,7 +53,7 @@ public class Filter {
         this.title.setTextColor(context.getResources().getColor(R.color.colorWhite));
         this.icon.setColorFilter(context.getResources().getColor(R.color.colorWhite));
         this.card.setCardBackgroundColor(context.getResources().getColor(R.color.colorPrimary));
-        placeResponse.setType(this.title.getText().toString().toLowerCase());
+        placeResponse.setType(this.type);
     }
 
     private void deSelect(){
@@ -77,4 +80,7 @@ public class Filter {
         this.icon = icon;
     }
 
+    public String getType() {
+        return type;
+    }
 }

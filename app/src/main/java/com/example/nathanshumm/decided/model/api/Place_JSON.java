@@ -60,7 +60,7 @@ public class Place_JSON {
         String latitude = "";
         String longitude = "";
         String reference = "";
-        String photoReference = "";
+        String priceLevel = "0";
         String placeId = "";
         String rating = "0";
 
@@ -79,13 +79,17 @@ public class Place_JSON {
                 rating = jPlace.getString("rating");
             }
 
+            if (!jPlace.isNull("price_level")) {
+                priceLevel = jPlace.getString("price_level");
+            }
+
 
             placeId = jPlace.getString("place_id");
             latitude = jPlace.getJSONObject("geometry").getJSONObject("location").getString("lat");
             longitude = jPlace.getJSONObject("geometry").getJSONObject("location").getString("lng");
             reference = jPlace.getString("reference");
 
-
+            place.put("price_level", priceLevel);
             place.put("place_name", placeName);
             place.put("vicinity", vicinity);
             place.put("lat", latitude);

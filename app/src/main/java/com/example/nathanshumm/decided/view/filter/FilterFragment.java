@@ -33,6 +33,9 @@ public class FilterFragment extends Fragment implements View.OnClickListener{
     private Filter restaurantFilter;
     private Filter clubFilter;
     private Filter barFilter;
+
+    private String currentType = "none";
+    private Boolean newFilter = true;
     private ArrayList<Filter> filterList = new ArrayList<>();
     private PlaceResponse placeResponse;
     public FilterFragment() {
@@ -52,7 +55,7 @@ public class FilterFragment extends Fragment implements View.OnClickListener{
         TextView cafeTitle = (TextView)filterView.findViewById(R.id.tv_cafe);
         ImageView cafeIcon = (ImageView)filterView.findViewById(R.id.iv_cafe);
         CardView cafeCard = (CardView)filterView.findViewById(R.id.cv_cafe);
-        cafeFilter = new Filter(this.getContext(),cafeTitle, cafeIcon, cafeCard);
+        cafeFilter = new Filter(this.getContext(),cafeTitle, cafeIcon, cafeCard, "cafe");
         filterList.add(cafeFilter);
         cafeCard.setOnClickListener(this);
 
@@ -60,7 +63,7 @@ public class FilterFragment extends Fragment implements View.OnClickListener{
         TextView restaurantTitle = (TextView)filterView.findViewById(R.id.tv_food);
         ImageView restaurantIcon = (ImageView)filterView.findViewById(R.id.iv_food);
         CardView restaurantCard = (CardView)filterView.findViewById(R.id.cv_food);
-        restaurantFilter = new Filter(this.getContext(),restaurantTitle, restaurantIcon, restaurantCard);
+        restaurantFilter = new Filter(this.getContext(),restaurantTitle, restaurantIcon, restaurantCard, "restaurant");
         filterList.add(restaurantFilter);
         restaurantCard.setOnClickListener(this);
 
@@ -68,7 +71,7 @@ public class FilterFragment extends Fragment implements View.OnClickListener{
         TextView clubTitle = (TextView)filterView.findViewById(R.id.tv_club);
         ImageView clubIcon = (ImageView)filterView.findViewById(R.id.iv_club);
         CardView clubCard = (CardView)filterView.findViewById(R.id.cv_club);
-        clubFilter = new Filter(this.getContext(),clubTitle, clubIcon, clubCard);
+        clubFilter = new Filter(this.getContext(),clubTitle, clubIcon, clubCard, "night_club");
         filterList.add(clubFilter);
         clubCard.setOnClickListener(this);
 
@@ -76,7 +79,7 @@ public class FilterFragment extends Fragment implements View.OnClickListener{
         TextView barTitle = (TextView)filterView.findViewById(R.id.tv_bar);
         ImageView barIcon = (ImageView)filterView.findViewById(R.id.iv_bar);
         CardView barCard = (CardView)filterView.findViewById(R.id.cv_bar);
-        barFilter = new Filter(this.getContext(),barTitle, barIcon, barCard);
+        barFilter = new Filter(this.getContext(),barTitle, barIcon, barCard, "bar");
         filterList.add(barFilter);
         barCard.setOnClickListener(this);
 
@@ -86,27 +89,48 @@ public class FilterFragment extends Fragment implements View.OnClickListener{
 
     @Override
     public void onClick(View v) {
-        deSelectAll();
         switch (v.getId()){
             case R.id.cv_cafe:
                 cafeFilter.onClick();
+                newFilterSelected(cafeFilter.getType());
                 break;
             case R.id.cv_food:
                 restaurantFilter.onClick();
+                newFilterSelected(restaurantFilter.getType());
                 break;
             case R.id.cv_club:
                 clubFilter.onClick();
+                newFilterSelected(clubFilter.getType());
                 break;
             case R.id.cv_bar:
                 barFilter.onClick();
+                newFilterSelected(barFilter.getType());
                 break;
         }
     }
 
-    private void deSelectAll(){
+    private void deSelectAll(String type){
         for(int i = 0; i < filterList.size(); i++) {
-           if(filterList.get(i).isSelected())
+           if(filterList.get(i).isSelected() && !filterList.get(i).getType().equals(type))
                filterList.get(i).onClick();
         }
     }
+
+    public void newFilterSelected(String type){
+        deSelectAll(type);
+        if(type.equals(currentType) || currentType.equals("none")) {
+            currentType = type;
+            newFilter = false;
+            Log.d("newFilter", "setfilter false");
+        } else {
+            newFilter = true;
+            currentType = type;
+            Log.d("newFilter", "setfilter true");
+        }
+    }
+
+    public String getCurrentType(){
+        return currentType;
+    }
+
 }
