@@ -34,7 +34,6 @@ public class LaunchActivity extends AppCompatActivity {
         window.setStatusBarColor(ContextCompat.getColor(this, R.color.colorBlack));
     }
 
-
     public static Intent newIntent(Context context){
         return new Intent(context, LaunchActivity.class);
     }

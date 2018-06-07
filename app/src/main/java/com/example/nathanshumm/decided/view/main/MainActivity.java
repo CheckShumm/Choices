@@ -96,19 +96,7 @@ public class MainActivity extends AppCompatActivity {
                         getSupportActionBar().setTitle("Favorites");
                         return true;
                     case R.id.nav_home:
-                        mainViewModel.getHomeFragment().getResponse(latitude, longitude);
-                        if(!mainViewModel.getFilterFragment().getCurrentType().equals(
-                                mainViewModel.getHomeFragment().getCurrentType()
-                        )) {
-                            Log.d("reload", "filter type 1: " + mainViewModel.getFilterFragment().getCurrentType()
-                                    + "\n home type 1: " + mainViewModel.getHomeFragment().getCurrentType());
-                            mainViewModel.getHomeFragment().reload();
-                        }else{
-                            Log.d("reload", "filter type 2: " + mainViewModel.getFilterFragment().getCurrentType()
-                                    + "\n home type 2: " + mainViewModel.getHomeFragment().getCurrentType());
-                        }
-                        viewPager.setCurrentItem(1);
-                        getSupportActionBar().setTitle("Choices");
+                        setHomeFragment();
                         return true;
 
                     default: return false;
@@ -133,6 +121,26 @@ public class MainActivity extends AppCompatActivity {
         adapter.addFragment(mainViewModel.getFavoritesFragment());
         viewPager.setAdapter(adapter);
 
+    }
+
+    public void setHomeFragment(){
+        mainViewModel.getHomeFragment().getResponse(latitude, longitude);
+        if(!mainViewModel.getFilterFragment().getCurrentType().equals(
+                mainViewModel.getHomeFragment().getCurrentType()
+        )) {
+            Log.d("reload", "filter type 1: " + mainViewModel.getFilterFragment().getCurrentType()
+                    + "\n home type 1: " + mainViewModel.getHomeFragment().getCurrentType());
+            mainViewModel.getHomeFragment().reload();
+        }else{
+            Log.d("reload", "filter type 2: " + mainViewModel.getFilterFragment().getCurrentType()
+                    + "\n home type 2: " + mainViewModel.getHomeFragment().getCurrentType());
+        }
+        viewPager.setCurrentItem(1,true);
+        getSupportActionBar().setTitle("Choices");
+    }
+
+    public void setCurrentItem(int i){
+        viewPager.setCurrentItem(i,true);
     }
 
     public void getLocation(){

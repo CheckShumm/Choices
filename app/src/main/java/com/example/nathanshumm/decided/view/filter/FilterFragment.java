@@ -4,6 +4,7 @@ package com.example.nathanshumm.decided.view.filter;
 import android.media.Image;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
 import android.support.v7.widget.CardView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -34,10 +35,15 @@ public class FilterFragment extends Fragment implements View.OnClickListener{
     private Filter clubFilter;
     private Filter barFilter;
 
+    private ViewPager mViewPager;
+
     private String currentType = "none";
     private Boolean newFilter = true;
     private ArrayList<Filter> filterList = new ArrayList<>();
     private PlaceResponse placeResponse;
+
+    private final int HOME_FRAGMENT_ID = 1;
+
     public FilterFragment() {
         // Required empty public constructor
     }
@@ -50,6 +56,8 @@ public class FilterFragment extends Fragment implements View.OnClickListener{
         View filterView = inflater.inflate(R.layout.fragment_filter, container, false);
         Log.e("context", "filter context: " + this.getContext());
         placeResponse = new PlaceResponse(this.getContext());
+
+        mViewPager = (ViewPager)filterView.findViewById(R.id.viewPager);
 
         // cafe Filter
         TextView cafeTitle = (TextView)filterView.findViewById(R.id.tv_cafe);
@@ -93,20 +101,28 @@ public class FilterFragment extends Fragment implements View.OnClickListener{
             case R.id.cv_cafe:
                 cafeFilter.onClick();
                 newFilterSelected(cafeFilter.getType());
+                setHomeFragment();
                 break;
             case R.id.cv_food:
                 restaurantFilter.onClick();
                 newFilterSelected(restaurantFilter.getType());
+                setHomeFragment();
                 break;
             case R.id.cv_club:
                 clubFilter.onClick();
                 newFilterSelected(clubFilter.getType());
+                setHomeFragment();
                 break;
             case R.id.cv_bar:
                 barFilter.onClick();
                 newFilterSelected(barFilter.getType());
+                setHomeFragment();
                 break;
         }
+    }
+
+    private void setHomeFragment(){
+        ((MainActivity)this.getActivity()).setHomeFragment();
     }
 
     private void deSelectAll(String type){
