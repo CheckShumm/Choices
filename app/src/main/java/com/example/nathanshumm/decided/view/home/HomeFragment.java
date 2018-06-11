@@ -91,12 +91,12 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Seri
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View homeView = inflater.inflate(R.layout.fragment_home, container, false);
-        getResponse();
+
         setup(homeView);
 
         likeButton = (ImageView)homeView.findViewById(R.id.btn_like);
         dislikeButton = (ImageView)homeView.findViewById(R.id.btn_dislike);
-        infoButton = (ImageView)homeView.findViewById(R.id.btn_info);
+        infoButton = (ImageView)homeView.findViewById(R.id.btn_refresh);
 
         likeButton.setOnClickListener(this);
         dislikeButton.setOnClickListener(this);
@@ -114,20 +114,23 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Seri
     }
 
     public void paginate(){
-        //cardStackView.setPaginationReserved();
+        cardStackView.setPaginationReserved();
         newPlaceList =  placeResponse.getPlace();
+        cardAdapter.addAll(newPlaceList);
         for(int i=1; i<newPlaceList.size(); i++){
-            cardAdapter.add(newPlaceList.get(i));
+            //cardAdapter.add(newPlaceList.get(i));
             Log.d("CardStackView", "Paginate cardadapter add: " + newPlaceList.get(i).getName());
         }
-        //cardAdapter.notifyDataSetChanged();
+        cardAdapter.notifyDataSetChanged();
         Log.d("paginate", "adapter size: " + cardAdapter.getCount());
     }
 
 
-    public void getResponse(){
-        Log.e("context", "home fragment context = " + this.getContext());
+    public void getResponse(double latitude, double longitude){
+        Log.d("LatLon", "Lat: " + latitude + "  long: " + longitude);
         placeResponse = new PlaceResponse(this.getContext());
+        placeResponse.setLatitude(latitude);
+        placeResponse.setLongitude(longitude);
         placeResponse.execute();
     }
 
@@ -154,10 +157,10 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Seri
                     paginate();
                 }
 
-                if(direction == SwipeDirection.Right){
+                if(direction == SwipeDirection.Left){
                 }
 
-                if(direction == SwipeDirection.Left){
+                if(direction == SwipeDirection.Right){
                     favoritesList.add(currPlace);
                     Log.d("CardStackView", "Liked: " + currPlace.getName());
                 }
@@ -276,12 +279,12 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Seri
     public void onClick(View v) {
         switch(v.getId()){
             case R.id.btn_like:
-                swipeLeft();
-                break;
-            case R.id.btn_dislike:
                 swipeRight();
                 break;
-            case R.id.btn_info:
+            case R.id.btn_dislike:
+                swipeLeft();
+                break;
+            case R.id.btn_refresh:
                 reload();
                 break;
         }

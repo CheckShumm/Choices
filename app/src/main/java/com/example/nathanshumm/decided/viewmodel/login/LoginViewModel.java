@@ -88,6 +88,7 @@ public class LoginViewModel extends ViewModel{
     }
 
     public void onLoginClicked(final View view) {
+        Log.d("onLogin", "login clicked");
         final Intent mainIntent = new Intent(view.getContext(), MainActivity.class);
 
         // Sign Up Error Handling

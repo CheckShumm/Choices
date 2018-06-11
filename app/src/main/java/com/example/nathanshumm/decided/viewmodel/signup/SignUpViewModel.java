@@ -107,6 +107,7 @@ public class SignUpViewModel extends ViewModel {
 
 
     public void onRegisterClicked(final View view){
+        Log.d("onSignUp", "signup clicked");
         final Intent launcherIntent = new Intent(view.getContext(), LaunchActivity.class);
 
         // Sign Up Error Handling

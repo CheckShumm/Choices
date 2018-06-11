@@ -72,5 +72,6 @@ public class SignUpActivity extends AppCompatActivity implements AuthResultCallb
         passwordVerify = (EditText)findViewById(R.id.et_signup_password_verify);
         password.setText("");
         passwordVerify.setText("");
+        progressDialog.dismiss();
     }
 }

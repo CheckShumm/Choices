@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.View;
 
 import com.example.nathanshumm.decided.R;
@@ -22,6 +23,7 @@ public class LauncherViewModel extends ViewModel {
     }
 
     public void onLoginClicked(View view){
+        Log.d("onLogin", "login clicked");
         Intent loginIntent = new Intent(view.getContext(), LoginActivity.class);
         view.getContext().startActivity(loginIntent);
     }
